@@ -1,0 +1,561 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>AppSumo 2026 Medical Plan Finder</title>
+<meta name="description" content="Describe your life situation and find the UHC medical plan that fits you best. AppSumo 2026 benefits." />
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 800 606'%3E%3Cpath d='M668 540L69 606c-9-1-18-3-26-8s-14-12-18-21-5-19-4-28 5-18 12-25C143 400 372 128 585 128c44 0 88 12 125 36 132 83 91 231 53 314-8 18-22 34-38 45s-37 17-57 17z' fill='%23FFBC00'/%3E%3Cpath d='M585 63C358 63 134 312 8 456c-6-9-9-20-8-30s6-20 13-28C123 272 352 0 565 0c44 0 88 13 125 36 34 21 61 52 77 89-7-6-15-11-23-16-48-30-103-46-160-46z' fill='%23FFBC00'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,400;1,600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#021414;       /* Black Pearl */
+    --ink-soft:#3c4c4a;
+    --muted:#7c8a88;
+    --bg:#F5F8F7;
+    --paper:#FFFFFF;
+    --line:#E4EBE9;
+    --accent:#FFBC00;    /* Dorado */
+    --accent-ink:#021414;
+    --hdhp:#07C03B;      --hdhp-ink:#0A8A38;  --hdhp-bg:#E7F7ED;  --hdhp-line:#B7E7C6;   /* Dollar */
+    --base:#0E6EF4;      --base-ink:#0B57CE;  --base-bg:#E4EEFE;  --base-line:#B9D4FB;   /* Bolt */
+    --buyup:#FF85FF;     --buyup-ink:#B02FB0; --buyup-bg:#FCE9FC; --buyup-line:#F6C6F6;  /* Pinky */
+    --good:#0A8A38;
+    --shadow:0 1px 2px rgba(20,16,8,.05), 0 12px 32px -12px rgba(20,16,8,.18);
+    --radius:18px;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{
+    font-family:'Barlow',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+    color:var(--ink);background:var(--bg);line-height:1.55;
+    -webkit-font-smoothing:antialiased;
+  }
+  h1,h2,h3,.display{font-family:'Barlow','Barlow',sans-serif;letter-spacing:-.02em;line-height:1.1}
+  .wrap{max-width:1120px;margin:0 auto;padding:0 22px}
+  a{color:inherit}
+
+  /* ---------- Header ---------- */
+  header{position:sticky;top:0;z-index:50;background:var(--ink);color:#fff}
+  .navbar{display:flex;align-items:center;justify-content:space-between;height:60px}
+  .logo{display:flex;align-items:center;gap:12px}
+  .logo .taco{height:30px;width:auto;display:block}
+  .logo .wordmark{height:19px;width:auto;display:block}
+  .badge{font-size:12px;font-weight:600;color:#d9d2c2;border:1px solid #39342b;padding:6px 12px;border-radius:999px}
+  @media(max-width:560px){.badge{display:none}}
+
+  /* ---------- Hero / finder ---------- */
+  .hero{background:
+      radial-gradient(1100px 460px at 12% -12%, rgba(255,188,0,.22), transparent 60%),
+      var(--ink);
+    color:#fff;padding:52px 0 130px}
+  .kicker{font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:.14em;font-size:12.5px;margin-bottom:14px}
+  .hero h1{font-size:clamp(30px,5vw,50px);font-weight:800;max-width:16ch}
+  .hero h1 em{font-style:normal;color:var(--accent)}
+  .hero p.sub{color:#cfc8b8;font-size:17px;margin-top:16px;max-width:56ch}
+
+  .finder{margin-top:30px;background:var(--paper);border-radius:22px;box-shadow:var(--shadow);padding:20px;color:var(--ink)}
+  .finder label{font-weight:700;font-size:14px;display:block;margin-bottom:8px}
+  .finder textarea{
+    width:100%;border:1.5px solid var(--line);border-radius:14px;padding:14px 16px;
+    font-family:inherit;font-size:16px;resize:vertical;min-height:82px;background:#fffdf8;color:var(--ink);
+  }
+  .finder textarea{background:#F8FBFA}
+  .finder textarea:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 4px rgba(255,188,0,.22)}
+  .chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+  .chip{border:1px solid var(--line);background:#fff;border-radius:999px;padding:8px 14px;font-size:13px;font-weight:600;color:var(--ink-soft);cursor:pointer;transition:.15s}
+  .chip:hover{border-color:var(--accent);background:#fffaf0;color:var(--ink)}
+  .go{margin-top:14px;display:flex;gap:10px;flex-wrap:wrap}
+  .btn{border:none;cursor:pointer;font-family:'Barlow';font-weight:700;font-size:16px;border-radius:12px;padding:14px 26px;transition:.15s}
+  .btn.primary{background:var(--accent);color:#000}
+  .btn.primary:hover{transform:translateY(-1px);box-shadow:0 8px 20px -6px rgba(255,188,0,.6)}
+  .btn.ghost{background:transparent;border:1.5px solid var(--line);color:var(--ink-soft)}
+  .btn.ghost:hover{border-color:var(--ink);color:var(--ink)}
+
+  /* ---------- Result ---------- */
+  #result{margin-top:-92px;margin-bottom:10px}
+  .result-card{background:var(--paper);border-radius:22px;box-shadow:var(--shadow);overflow:hidden;border:1px solid var(--line)}
+  .result-top{padding:26px 28px;display:flex;gap:22px;align-items:flex-start;flex-wrap:wrap}
+  .rec-flag{font-size:12px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+  .rec-name{font-family:'Barlow';font-weight:800;font-size:30px;margin:4px 0 2px;display:flex;align-items:center;gap:12px}
+  .pill{font-size:12px;font-weight:800;padding:5px 11px;border-radius:999px}
+  .rec-why{margin-top:14px;display:grid;gap:9px}
+  .rec-why div{display:flex;gap:10px;font-size:15px;color:var(--ink-soft)}
+  .rec-why .tick{color:var(--good);font-weight:800;flex:0 0 auto}
+  .rec-cost{margin-left:auto;text-align:right;min-width:200px}
+  .rec-cost .lab{font-size:12px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.1em}
+  .rec-cost .big{font-family:'Barlow';font-weight:800;font-size:34px;margin-top:4px}
+  .rec-cost .note{font-size:13px;color:var(--good);font-weight:700;margin-top:2px}
+  @media(max-width:640px){.rec-cost{margin-left:0;text-align:left}}
+
+  .ranking{border-top:1px solid var(--line);padding:22px 28px;background:#F8FBFA}
+  .ranking h4{font-size:13px;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);margin-bottom:14px;font-family:'Barlow';font-weight:700}
+  .rrow{display:grid;grid-template-columns:150px 1fr auto;gap:14px;align-items:center;margin-bottom:12px}
+  .rrow .rname{font-weight:700;font-size:14px;display:flex;align-items:center;gap:8px}
+  .dot{width:10px;height:10px;border-radius:50%;flex:0 0 auto}
+  .track{height:26px;background:#EAEFED;border-radius:8px;overflow:hidden;position:relative}
+  .fill{height:100%;border-radius:8px;transition:width .7s cubic-bezier(.2,.8,.2,1)}
+  .rrow .rval{font-weight:800;font-family:'Barlow';font-size:15px;white-space:nowrap}
+  .rrow.win .rval{color:var(--good)}
+  .tradeoff{padding:16px 28px;background:var(--ink);color:#efe9da;font-size:14px;display:flex;gap:10px;align-items:flex-start}
+  .tradeoff b{color:var(--accent)}
+  @media(max-width:560px){.rrow{grid-template-columns:110px 1fr;gap:8px}.rrow .rval{grid-column:2;text-align:right}}
+
+  /* ---------- Sections ---------- */
+  section.block{padding:56px 0}
+  .h2{font-size:clamp(24px,3.4vw,34px);font-weight:800}
+  .lead{color:var(--ink-soft);font-size:17px;margin-top:10px;max-width:62ch}
+  .eyebrow{font-weight:700;color:#b98f00;text-transform:uppercase;letter-spacing:.12em;font-size:12.5px;margin-bottom:10px}
+
+  /* Plan cards */
+  .plans{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:30px}
+  @media(max-width:820px){.plans{grid-template-columns:1fr}}
+  .plan{background:var(--paper);border-radius:var(--radius);border:1px solid var(--line);box-shadow:var(--shadow);overflow:hidden;display:flex;flex-direction:column}
+  .plan .cap{padding:16px 20px;color:var(--ink);font-family:'Barlow';font-weight:800}
+  .plan.hdhp .cap{background:var(--hdhp)} .plan.base .cap{background:var(--base)} .plan.buyup .cap{background:var(--buyup)}
+  .plan .cap small{display:block;font-weight:600;font-size:12px;opacity:.9;font-family:'Barlow'}
+  .plan .body{padding:18px 20px;display:grid;gap:11px}
+  .kv{display:flex;justify-content:space-between;gap:12px;font-size:14px;border-bottom:1px dashed var(--line);padding-bottom:9px}
+  .kv:last-child{border-bottom:none}
+  .kv span:first-child{color:var(--muted)}
+  .kv b{font-weight:700;text-align:right}
+  .plan .foot{margin-top:auto;padding:14px 20px;background:#F8FBFA;border-top:1px solid var(--line);font-size:13px;color:var(--ink-soft)}
+  .tag{display:inline-block;font-size:11px;font-weight:800;padding:3px 9px;border-radius:999px;margin-left:8px}
+  .tag.value{background:var(--hdhp-bg);color:var(--hdhp-ink)}
+  .tag.pred{background:var(--buyup-bg);color:var(--buyup-ink)}
+
+  /* Scenario cards */
+  .scen{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:30px}
+  @media(max-width:900px){.scen{grid-template-columns:1fr}}
+  .card{background:var(--paper);border-radius:var(--radius);border:1px solid var(--line);box-shadow:var(--shadow);padding:22px}
+  .card .who{display:flex;align-items:center;gap:12px;margin-bottom:6px}
+  .avatar{width:44px;height:44px;border-radius:12px;display:grid;place-items:center;background:var(--ink)}
+  .avatar svg{width:26px;height:auto;display:block}
+  .card h3{font-size:19px;font-weight:700}
+  .card .desc{font-size:13.5px;color:var(--ink-soft);min-height:96px}
+  .bars{margin-top:14px;display:grid;gap:9px}
+  .bar{display:grid;grid-template-columns:64px 1fr auto;align-items:center;gap:10px;font-size:12.5px}
+  .bar .bt{height:22px;border-radius:6px;position:relative;background:#EAEFED;overflow:hidden}
+  .bar .bf{height:100%;border-radius:6px}
+  .bar .bv{font-weight:800;font-family:'Barlow';font-size:13px;white-space:nowrap}
+  .winline{margin-top:14px;font-size:13px;font-weight:700;color:var(--good);display:flex;gap:7px;align-items:center}
+
+  /* Comparison table */
+  .tblwrap{overflow-x:auto;margin-top:28px;border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);background:var(--paper)}
+  table{border-collapse:collapse;width:100%;min-width:680px;font-size:13.5px}
+  th,td{padding:12px 14px;text-align:left;border-bottom:1px solid var(--line)}
+  thead th{background:var(--ink);color:#fff;font-family:'Barlow';font-weight:600;position:sticky;top:0}
+  thead th.hdhp,thead th.base,thead th.buyup{color:var(--ink)}
+  thead th.hdhp{background:var(--hdhp)} thead th.base{background:var(--base)} thead th.buyup{background:var(--buyup)}
+  td:first-child,th:first-child{font-weight:600}
+  tbody tr:nth-child(even){background:#F8FBFA}
+  .grp td{background:var(--accent-ink) !important;color:var(--accent);font-weight:700;font-family:'Barlow';font-size:12px;text-transform:uppercase;letter-spacing:.08em}
+
+  footer{background:var(--ink);color:#cfc8b8;padding:40px 0;font-size:13.5px}
+  footer .wrap{display:grid;gap:14px}
+  footer b{color:#fff}
+  .disc{border:1px solid #39342b;border-radius:12px;padding:16px 18px;line-height:1.6}
+  .hide{display:none}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap navbar">
+    <div class="logo">
+      <svg class="taco" viewBox="0 0 800 606" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M668.039 539.944L68.7085 605.832C59.4028 605.829 50.2959 603.139 42.4822 598.085C34.6686 593.031 28.4805 585.828 24.6616 577.342C20.8427 568.856 19.5555 559.447 20.9545 550.247C22.3536 541.047 26.3795 532.447 32.5484 525.48C142.565 400.135 372.358 127.75 585.286 127.75C629.391 127.743 672.588 140.284 709.831 163.911C841.607 246.663 800.615 395.303 762.855 478.056C754.557 496.309 741.233 511.822 724.443 522.782C707.652 533.741 688.088 539.694 668.039 539.944V539.944Z" fill="#FFBC00"/><path d="M584.51 63.4882C357.917 63.4882 133.756 311.745 7.61169 455.586C1.90938 446.764 -0.709322 436.302 0.16492 425.834C1.03916 415.366 5.35708 405.483 12.4437 397.729C122.492 272.385 352.285 0 565.214 0C609.319 -0.00794129 652.515 12.5337 689.758 36.1601C724.208 57.0339 751.195 88.2428 766.878 125.344C759.741 119.564 752.261 114.221 744.478 109.344C696.529 79.2997 641.062 63.425 584.478 63.5522" fill="#FFBC00"/></svg>
+      <svg class="wordmark" viewBox="0 0 1180 183" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="AppSumo"><path d="M744.691 111.655C744.691 142.881 730.498 142.881 722.928 142.881C716.305 142.881 701.165 142.881 701.165 111.655V24.6006H665.207V117.332C665.207 153.29 688.863 177.891 722.928 177.891C756.993 177.891 780.649 153.281 780.649 117.332V24.6006H744.691V111.655Z" fill="white"/><path d="M1099.53 20.8174C1078.2 20.8174 1057.74 29.2913 1042.66 44.3749C1027.57 59.4586 1019.1 79.9164 1019.1 101.248C1019.1 122.579 1027.57 143.037 1042.66 158.121C1057.74 173.204 1078.2 181.678 1099.53 181.678C1144.95 181.678 1179.96 146.668 1179.96 101.249C1179.97 90.6839 1177.89 80.221 1173.86 70.4586C1169.82 60.6963 1163.89 51.826 1156.42 44.3555C1148.95 36.885 1140.08 30.9608 1130.32 26.9218C1120.56 22.8829 1110.09 20.8085 1099.53 20.8174V20.8174ZM1099.53 144.775C1088.03 144.645 1077.03 140.017 1068.9 131.883C1060.76 123.748 1056.13 112.752 1056 101.249C1056 89.7046 1060.59 78.6333 1068.75 70.4704C1076.92 62.3075 1087.99 57.7217 1099.53 57.7217C1111.07 57.7217 1122.15 62.3075 1130.31 70.4704C1138.47 78.6333 1143.06 89.7046 1143.06 101.249C1143.07 106.969 1141.96 112.636 1139.78 117.924C1137.59 123.212 1134.39 128.016 1130.34 132.061C1126.3 136.106 1121.49 139.311 1116.21 141.493C1110.92 143.675 1105.25 144.79 1099.53 144.775V144.775Z" fill="white"/><path d="M80.4296 0L0 176.947H40.6876L55.8279 142.882H105.033L120.173 176.947H160.861L80.4296 0ZM65.291 112.6L80.4313 75.6964L95.5749 112.6H65.291Z" fill="white"/><path d="M255.477 25.5498H196.817V174.109H233.721V131.528H253.591C290.494 131.528 313.205 110.711 313.205 78.5391C313.205 45.4216 291.442 25.5498 255.477 25.5498ZM275.349 79.4898C275.349 91.7949 266.833 99.3616 252.639 99.3616H233.721V58.669H252.645C267.786 58.669 275.356 66.2391 275.356 79.4864L275.349 79.4898Z" fill="white"/><path d="M408.77 25.5498H350.11V174.109H387.014V131.528H406.886C443.789 131.528 466.499 110.711 466.499 78.5391C465.552 45.4216 443.787 25.5498 408.77 25.5498ZM428.642 79.4898C428.642 91.7949 420.126 99.3616 405.932 99.3616H387.014V58.669H405.938C420.131 58.669 428.649 66.2391 428.649 79.4864L428.642 79.4898Z" fill="white"/><path d="M575.313 72.8595C545.984 65.2893 540.303 61.5051 540.303 52.042V51.0964C540.303 42.5806 547.873 37.849 561.12 37.849C574.368 37.849 588.561 43.5262 604.647 53.935L605.592 54.8806L626.41 24.6017L625.464 23.6561C607.427 9.39315 585.06 1.71589 562.066 1.89465C526.11 1.89465 501.507 23.6578 501.507 53.9383V54.884C501.507 90.8417 526.117 99.3575 558.282 107.873C586.669 115.443 591.399 120.178 591.399 127.745V128.691C591.399 138.154 582.884 142.884 568.689 142.884C551.664 142.884 535.57 136.259 519.484 123.012L518.538 122.066L494.884 150.454L495.829 151.399C515.825 169.345 541.825 179.137 568.691 178.84C607.487 178.84 632.089 158.022 632.089 124.9C630.196 93.6803 608.433 81.3786 575.313 72.8595Z" fill="white"/><path d="M903.659 182.624L859.186 106.926L845.938 176.947H813.767L846.886 20.8174L905.546 119.226L961.38 20.8174L994.498 176.947H960.435L947.187 107.871L903.659 182.624Z" fill="white"/></svg>
+    </div>
+    <div class="badge">2026 Benefits · UnitedHealthcare</div>
+  </div>
+</header>
+
+<!-- HERO + FINDER -->
+<div class="hero">
+  <div class="wrap">
+    <div class="kicker">Open Enrollment · Sept 1 2026 – Aug 31 2027</div>
+    <h1>Which medical plan is <em>right for you?</em></h1>
+    <p class="sub">Tell us about your life — your family, your health, what you expect this year. We'll match you to one of AppSumo's three UnitedHealthcare plans and show you what it'd likely cost.</p>
+
+    <div class="finder">
+      <label for="scenario">Describe your situation in a sentence or two</label>
+      <textarea id="scenario" placeholder="e.g. Married, expecting a baby in November, otherwise healthy and we have some savings…"></textarea>
+      <div class="chips" id="chips">
+        <button class="chip" data-fill="Married, we're having a baby in November. Otherwise healthy and we have savings to cover upfront costs.">🍼 Baby on the way</button>
+        <button class="chip" data-fill="Single, healthy, I exercise and rarely go to the doctor. No regular medications.">🏃 Single &amp; healthy</button>
+        <button class="chip" data-fill="Married with two young kids in sports. Generally healthy, one maintenance prescription, kids get the occasional urgent care visit.">👨‍👩‍👧 Family with young kids</button>
+        <button class="chip" data-fill="I have a chronic condition, see a specialist regularly and take a few maintenance medications every month. I want predictable copays.">💊 Chronic condition</button>
+        <button class="chip" data-fill="Married with four kids. Lots of doctor visits, ER trips, and several medications across the family every year.">🏥 Heavy medical use</button>
+        <button class="chip" data-fill="Planning knee surgery this year. Single, want to keep my out-of-pocket predictable and I don't have much saved.">🩺 Planned surgery</button>
+      </div>
+      <div class="go">
+        <button class="btn primary" id="findBtn">Find my plan →</button>
+        <button class="btn ghost" id="resetBtn">Clear</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- RESULT -->
+<div class="wrap">
+  <div id="result" class="hide">
+    <div class="result-card">
+      <div class="result-top">
+        <div style="flex:1;min-width:240px">
+          <div class="rec-flag">Your best-fit plan</div>
+          <div class="rec-name" id="recName">—</div>
+          <div class="rec-why" id="recWhy"></div>
+        </div>
+        <div class="rec-cost">
+          <div class="lab">Est. cost this year</div>
+          <div class="big" id="recCost">—</div>
+          <div class="note" id="recNote"></div>
+        </div>
+      </div>
+      <div class="ranking">
+        <h4>How all three compare for your situation (estimated total for the year)</h4>
+        <div id="ranks"></div>
+      </div>
+      <div class="tradeoff" id="tradeoff"></div>
+    </div>
+  </div>
+</div>
+
+<!-- PLANS -->
+<section class="block" id="plans">
+  <div class="wrap">
+    <div class="eyebrow">The three plans</div>
+    <div class="h2">Your 2026 UnitedHealthcare options</div>
+    <p class="lead">All three cover 100% preventive care and use the same nationwide UHC Choice+ network. The difference is how you pay for everything else.</p>
+    <div class="plans">
+      <div class="plan hdhp">
+        <div class="cap">UHC Choice HDHP <small>HSA-eligible · high deductible</small></div>
+        <div class="body">
+          <div class="kv"><span>Deductible (ind / fam)</span><b>$5,000 / $10,000</b></div>
+          <div class="kv"><span>Coinsurance</span><b>0% after deductible</b></div>
+          <div class="kv"><span>Out-of-pocket max</span><b>$5,000 / $10,000</b></div>
+          <div class="kv"><span>Doctor &amp; Rx</span><b>0% after deductible</b></div>
+          <div class="kv"><span>AppSumo HSA gift</span><b>$1,200–$2,400 / yr</b></div>
+          <div class="kv"><span>Your premium (semi-monthly)</span><b>$0 – $191.20</b></div>
+        </div>
+        <div class="foot">Lowest premiums + free HSA money. You pay full cost until the deductible, then 100% covered. <span class="tag value">Best value</span></div>
+      </div>
+      <div class="plan base">
+        <div class="cap">UHC Choice+ PPO <small>Base copay plan</small></div>
+        <div class="body">
+          <div class="kv"><span>Deductible (ind / fam)</span><b>$3,000 / $6,000</b></div>
+          <div class="kv"><span>Coinsurance</span><b>20% after deductible</b></div>
+          <div class="kv"><span>Out-of-pocket max</span><b>$6,000 / $12,000</b></div>
+          <div class="kv"><span>PCP / Specialist</span><b>$30 / $60 copay</b></div>
+          <div class="kv"><span>Retail Rx</span><b>$15 / $45 / $85</b></div>
+          <div class="kv"><span>Your premium (semi-monthly)</span><b>$0 – $399.31</b></div>
+        </div>
+        <div class="foot">Copays from day one, but a 20% share after the deductible means less predictable big bills.</div>
+      </div>
+      <div class="plan buyup">
+        <div class="cap">UHC Choice+ PPO Buy&nbsp;Up <small>Richest copay plan</small></div>
+        <div class="body">
+          <div class="kv"><span>Deductible (ind / fam)</span><b>$2,500 / $5,000</b></div>
+          <div class="kv"><span>Coinsurance</span><b>0% after deductible</b></div>
+          <div class="kv"><span>Out-of-pocket max</span><b>$5,000 / $10,000</b></div>
+          <div class="kv"><span>PCP / Specialist</span><b>$30 / $60 copay</b></div>
+          <div class="kv"><span>Retail Rx</span><b>$15 / $45 / $85</b></div>
+          <div class="kv"><span>Your premium (semi-monthly)</span><b>$37.79 – $550.19</b></div>
+        </div>
+        <div class="foot">Most predictable: fixed copays + no coinsurance. You pay the highest premium for that peace of mind. <span class="tag pred">Most predictable</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SCENARIOS -->
+<section class="block" id="scenarios" style="background:#fff">
+  <div class="wrap">
+    <div class="eyebrow">Real examples from HR</div>
+    <div class="h2">See how the plans play out</div>
+    <p class="lead">Three real-world profiles HR modeled — from barely-uses-it to heavy medical year. Bars show each person's <b>actual out-of-pocket cost</b> for the year (premiums + care, minus the HSA gift). Notice the HDHP wins every time.</p>
+    <div class="scen" id="scenCards"></div>
+    <p class="lead" style="margin-top:22px;font-size:15px"><b>The pattern:</b> across low, medium, and heavy usage, the HDHP came out cheapest overall — largely because of the lowest premiums and AppSumo's generous HSA contribution. Choose another plan mainly if you want fixed copays or can't front the deductible.</p>
+  </div>
+</section>
+
+<!-- TABLE -->
+<section class="block" id="compare">
+  <div class="wrap">
+    <div class="eyebrow">Side by side</div>
+    <div class="h2">Full plan comparison</div>
+    <p class="lead">In-network benefits. Semi-monthly premiums show <b>your cost</b> (24 pay periods per year).</p>
+    <div class="tblwrap">
+      <table>
+        <thead>
+          <tr><th>Benefit</th><th class="hdhp">Choice HDHP</th><th class="base">Choice+ PPO (Base)</th><th class="buyup">Choice+ PPO Buy Up</th></tr>
+        </thead>
+        <tbody>
+          <tr class="grp"><td colspan="4">Deductible &amp; out-of-pocket</td></tr>
+          <tr><td>Deductible (ind / family)</td><td>$5,000 / $10,000</td><td>$3,000 / $6,000</td><td>$2,500 / $5,000</td></tr>
+          <tr><td>Coinsurance (member share)</td><td>0%</td><td>20%</td><td>0%</td></tr>
+          <tr><td>Out-of-pocket max (ind / family)</td><td>$5,000 / $10,000</td><td>$6,000 / $12,000</td><td>$5,000 / $10,000</td></tr>
+          <tr class="grp"><td colspan="4">Care &amp; copays</td></tr>
+          <tr><td>Primary care visit</td><td>0% after ded.</td><td>$30 copay</td><td>$30 copay</td></tr>
+          <tr><td>Specialist visit</td><td>0% after ded.</td><td>$60 copay</td><td>$60 copay</td></tr>
+          <tr><td>Preventive care</td><td>100% covered</td><td>100% covered</td><td>100% covered</td></tr>
+          <tr><td>Lab / X-ray</td><td>0% after ded.</td><td>100% covered</td><td>100% covered</td></tr>
+          <tr><td>Imaging (CT / MRI / PET)</td><td>0% after ded.</td><td>20% after ded.</td><td>0% after ded.</td></tr>
+          <tr><td>Inpatient hospital</td><td>0% after ded.</td><td>20% after ded.</td><td>0% after ded.</td></tr>
+          <tr><td>Urgent care</td><td>0% after ded.</td><td>$50 copay</td><td>$50 copay</td></tr>
+          <tr><td>Emergency room</td><td>0% after ded.</td><td>$500 then coinsurance</td><td>$500 copay</td></tr>
+          <tr><td>Retail Rx (30-day)</td><td>0% after ded.</td><td>$15 / $45 / $85</td><td>$15 / $45 / $85</td></tr>
+          <tr class="grp"><td colspan="4">Cost — your semi-monthly premium</td></tr>
+          <tr><td>Employee only</td><td>$0.00</td><td>$0.00</td><td>$37.79</td></tr>
+          <tr><td>Employee + spouse</td><td>$87.34</td><td>$228.00</td><td>$314.15</td></tr>
+          <tr><td>Employee + child(ren)</td><td>$118.94</td><td>$276.00</td><td>$380.29</td></tr>
+          <tr><td>Employee + family</td><td>$191.20</td><td>$399.31</td><td>$550.19</td></tr>
+          <tr class="grp"><td colspan="4">AppSumo HSA contribution (per year)</td></tr>
+          <tr><td>Employee / +spouse / +kids / family</td><td>$1,200 / $1,800 / $2,100 / $2,400</td><td>Not eligible</td><td>Not eligible</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div class="logo" style="margin-bottom:4px">
+      <svg class="taco" viewBox="0 0 800 606" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M668.039 539.944L68.7085 605.832C59.4028 605.829 50.2959 603.139 42.4822 598.085C34.6686 593.031 28.4805 585.828 24.6616 577.342C20.8427 568.856 19.5555 559.447 20.9545 550.247C22.3536 541.047 26.3795 532.447 32.5484 525.48C142.565 400.135 372.358 127.75 585.286 127.75C629.391 127.743 672.588 140.284 709.831 163.911C841.607 246.663 800.615 395.303 762.855 478.056C754.557 496.309 741.233 511.822 724.443 522.782C707.652 533.741 688.088 539.694 668.039 539.944V539.944Z" fill="#FFBC00"/><path d="M584.51 63.4882C357.917 63.4882 133.756 311.745 7.61169 455.586C1.90938 446.764 -0.709322 436.302 0.16492 425.834C1.03916 415.366 5.35708 405.483 12.4437 397.729C122.492 272.385 352.285 0 565.214 0C609.319 -0.00794129 652.515 12.5337 689.758 36.1601C724.208 57.0339 751.195 88.2428 766.878 125.344C759.741 119.564 752.261 114.221 744.478 109.344C696.529 79.2997 641.062 63.425 584.478 63.5522" fill="#FFBC00"/></svg>
+      <svg class="wordmark" viewBox="0 0 1180 183" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="AppSumo"><path d="M744.691 111.655C744.691 142.881 730.498 142.881 722.928 142.881C716.305 142.881 701.165 142.881 701.165 111.655V24.6006H665.207V117.332C665.207 153.29 688.863 177.891 722.928 177.891C756.993 177.891 780.649 153.281 780.649 117.332V24.6006H744.691V111.655Z" fill="white"/><path d="M1099.53 20.8174C1078.2 20.8174 1057.74 29.2913 1042.66 44.3749C1027.57 59.4586 1019.1 79.9164 1019.1 101.248C1019.1 122.579 1027.57 143.037 1042.66 158.121C1057.74 173.204 1078.2 181.678 1099.53 181.678C1144.95 181.678 1179.96 146.668 1179.96 101.249C1179.97 90.6839 1177.89 80.221 1173.86 70.4586C1169.82 60.6963 1163.89 51.826 1156.42 44.3555C1148.95 36.885 1140.08 30.9608 1130.32 26.9218C1120.56 22.8829 1110.09 20.8085 1099.53 20.8174V20.8174ZM1099.53 144.775C1088.03 144.645 1077.03 140.017 1068.9 131.883C1060.76 123.748 1056.13 112.752 1056 101.249C1056 89.7046 1060.59 78.6333 1068.75 70.4704C1076.92 62.3075 1087.99 57.7217 1099.53 57.7217C1111.07 57.7217 1122.15 62.3075 1130.31 70.4704C1138.47 78.6333 1143.06 89.7046 1143.06 101.249C1143.07 106.969 1141.96 112.636 1139.78 117.924C1137.59 123.212 1134.39 128.016 1130.34 132.061C1126.3 136.106 1121.49 139.311 1116.21 141.493C1110.92 143.675 1105.25 144.79 1099.53 144.775V144.775Z" fill="white"/><path d="M80.4296 0L0 176.947H40.6876L55.8279 142.882H105.033L120.173 176.947H160.861L80.4296 0ZM65.291 112.6L80.4313 75.6964L95.5749 112.6H65.291Z" fill="white"/><path d="M255.477 25.5498H196.817V174.109H233.721V131.528H253.591C290.494 131.528 313.205 110.711 313.205 78.5391C313.205 45.4216 291.442 25.5498 255.477 25.5498ZM275.349 79.4898C275.349 91.7949 266.833 99.3616 252.639 99.3616H233.721V58.669H252.645C267.786 58.669 275.356 66.2391 275.356 79.4864L275.349 79.4898Z" fill="white"/><path d="M408.77 25.5498H350.11V174.109H387.014V131.528H406.886C443.789 131.528 466.499 110.711 466.499 78.5391C465.552 45.4216 443.787 25.5498 408.77 25.5498ZM428.642 79.4898C428.642 91.7949 420.126 99.3616 405.932 99.3616H387.014V58.669H405.938C420.131 58.669 428.649 66.2391 428.649 79.4864L428.642 79.4898Z" fill="white"/><path d="M575.313 72.8595C545.984 65.2893 540.303 61.5051 540.303 52.042V51.0964C540.303 42.5806 547.873 37.849 561.12 37.849C574.368 37.849 588.561 43.5262 604.647 53.935L605.592 54.8806L626.41 24.6017L625.464 23.6561C607.427 9.39315 585.06 1.71589 562.066 1.89465C526.11 1.89465 501.507 23.6578 501.507 53.9383V54.884C501.507 90.8417 526.117 99.3575 558.282 107.873C586.669 115.443 591.399 120.178 591.399 127.745V128.691C591.399 138.154 582.884 142.884 568.689 142.884C551.664 142.884 535.57 136.259 519.484 123.012L518.538 122.066L494.884 150.454L495.829 151.399C515.825 169.345 541.825 179.137 568.691 178.84C607.487 178.84 632.089 158.022 632.089 124.9C630.196 93.6803 608.433 81.3786 575.313 72.8595Z" fill="white"/><path d="M903.659 182.624L859.186 106.926L845.938 176.947H813.767L846.886 20.8174L905.546 119.226L961.38 20.8174L994.498 176.947H960.435L947.187 107.871L903.659 182.624Z" fill="white"/></svg>
+    </div>
+    <div class="disc">
+      <b>This is a helping tool, not the official plan document.</b> Estimates are rough and based on the sample scenarios HR shared — your real costs depend on your care, providers, and prescriptions. Always confirm with the official plan documents on your benefits landing page. Enroll through Insperity by <b>Friday, Aug 7</b>. New baby, marriage, or other life event? Tell HR within <b>30 days</b> to update coverage.
+    </div>
+    <div>Questions? Reach out to <b>Angelina</b> in the #benefits channel or your HR team.</div>
+  </div>
+</footer>
+
+<script>
+/* ---------------- Plan data ---------------- */
+const PLANS = {
+  hdhp:  {name:'UHC Choice HDHP',       short:'HDHP',    color:'#07C03B', ink:'#0A8A38', tag:'Best value'},
+  base:  {name:'UHC Choice+ PPO (Base)',short:'Base PPO',color:'#0E6EF4', ink:'#0B57CE', tag:'Middle'},
+  buyup: {name:'UHC Choice+ PPO Buy Up',short:'Buy Up',  color:'#FF85FF', ink:'#B02FB0', tag:'Most predictable'}
+};
+
+// Semi-monthly premium x 24 = annual, by coverage tier
+const PREM = {
+  single: {hdhp:0,        base:0,        buyup:37.79*24},
+  couple: {hdhp:87.34*24, base:228.00*24,buyup:314.15*24},
+  kids:   {hdhp:118.94*24,base:276.00*24,buyup:380.29*24},
+  family: {hdhp:191.20*24,base:399.31*24,buyup:550.19*24}
+};
+const HSA = {single:1200, couple:1800, kids:2100, family:2400};
+const TIER_LABEL = {single:'Employee only', couple:'Employee + spouse', kids:'Employee + child(ren)', family:'Employee + family'};
+
+// Estimated CARE spend for the year, by usage level & plan
+const CARE = {
+  low:          {hdhp:250,   base:150,   buyup:150},
+  moderate:     {hdhp:2500,  base:2200,  buyup:2000},
+  highOne:      {hdhp:5000,  base:6000,  buyup:5000},   // one big event -> individual OOP max
+  highFamily:   {hdhp:10000, base:12000, buyup:10000}   // whole-family heavy -> family OOP max
+};
+
+/* ---------------- Parse the scenario ---------------- */
+function analyze(t){
+  t = ' ' + t.toLowerCase() + ' ';
+  const has = (...ws)=>ws.some(w=>t.includes(w));
+
+  const spouse = has('marri','spouse','partner','wife','husband','my wife','my husband','we\'re','we are','we have','my family');
+  const kids   = has('kid','child','children','son','daughter','baby','babies','pregnan','expecting','newborn','toddler','four kids','two kids');
+  const babyEvent = has('baby','pregnan','expecting','due ','newborn','having a child','deliver');
+  const surgery   = has('surgery','operation','procedure','knee','hip','acl','shoulder','replacement','planned');
+
+  // coverage tier
+  let tier = 'single';
+  if(spouse && kids) tier='family';
+  else if(kids) tier='kids';
+  else if(spouse) tier='couple';
+
+  // usage level
+  const heavyFam = has('chronic','asthma','diabet','heart','cancer','several medic','multiple medic','lots of','er trip','emergency','four kids','many','frequent','every year it','plagued');
+  const moderate = has('maintenance','birth control','occasional','a few','some medic','allergi','urgent care','one prescription','generally healthy','sports','accident');
+  const lowUse   = has('healthy','rarely','never sick','no medic','no medication','fit','exercise','barely','don\'t go to the doctor');
+
+  let usage='moderate', usageLabel='moderate use';
+  if(babyEvent || surgery){ usage='highOne'; usageLabel='a major planned event'; }
+  if(heavyFam){ usage='highFamily'; usageLabel='heavy, ongoing medical use'; }
+  // A single person can only hit their individual out-of-pocket max, not a family one
+  if(usage==='highFamily' && tier==='single'){ usage='highOne'; }
+  else if(lowUse && !babyEvent && !surgery){ usage='low'; usageLabel='light use — you rarely need care'; }
+  else if(moderate && !babyEvent && !surgery && !heavyFam){ usage='moderate'; usageLabel='moderate use'; }
+
+  // preferences
+  const wantsPredictable = has('predictable','no surprise','hate surprise','fixed cost','budget','peace of mind','simple','copay only','known cost');
+  const cashTight = has('can\'t afford','cant afford','no savings','don\'t have much saved','tight','cash flow','can\'t front','cant front','paycheck to paycheck','little saved');
+  const hasSavings = has('savings','can cover','have money','emergency fund','we have savings','afford the deductible');
+
+  return {tier, usage, usageLabel, babyEvent, surgery, heavyFam, lowUse,
+          wantsPredictable, cashTight, hasSavings, spouse, kids, raw:t.trim()};
+}
+
+/* ---------------- Cost model (mirrors HR's method) ---------------- */
+function costFor(plan, a){
+  const prem = PREM[a.tier][plan];
+  const care = CARE[a.usage][plan];
+  if(plan==='hdhp'){
+    const hsa = HSA[a.tier];
+    const reimb = Math.min(hsa, care);
+    return {net: prem + care - reimb, prem, care, hsaLeft: hsa - reimb};
+  }
+  return {net: prem + care, prem, care, hsaLeft:0};
+}
+
+function money(n){ return '$'+Math.round(n).toLocaleString(); }
+
+/* ---------------- Recommend ---------------- */
+function recommend(a){
+  const costs = {hdhp:costFor('hdhp',a), base:costFor('base',a), buyup:costFor('buyup',a)};
+  const ranked = Object.keys(costs).sort((x,y)=>costs[x].net-costs[y].net);
+  const value = ranked[0]; // usually hdhp
+
+  let pick = value, reasonMode='value';
+  // Predictability / cash-flow seekers -> Buy Up, if the premium isn't wildly worse
+  if((a.wantsPredictable || a.cashTight) && !a.hasSavings){
+    pick = 'buyup'; reasonMode='predictable';
+  }
+  // Baby with savings -> keep value pick (HDHP)
+  if(a.babyEvent && a.hasSavings){ pick = value; reasonMode='value'; }
+
+  return {costs, ranked, pick, value, reasonMode};
+}
+
+/* ---------------- Build reasons ---------------- */
+function reasons(a, r){
+  const out=[];
+  const p = r.pick;
+  if(p==='hdhp'){
+    out.push('Lowest premiums of the three, plus AppSumo drops <b>'+money(HSA[a.tier])+'</b> of free HSA money into this plan each year.');
+    if(a.babyEvent) out.push('Even with a delivery, the HDHP\'s $10k family cap matches the Buy Up plan — but you pay far less in premium to get there.');
+    if(a.heavyFam) out.push('Its out-of-pocket max is the same or lower than the other plans, so a heavy year still costs you the least overall.');
+    if(a.lowUse) out.push('If you barely use care, most of that HSA money stays in your account as tax-free savings.');
+    out.push('Same nationwide UHC network and 100% preventive care as every other plan.');
+  } else if(p==='buyup'){
+    out.push('Fixed copays from day one and <b>0% coinsurance</b> — no surprise percentage-of-the-bill charges.');
+    out.push('Lowest deductible ($2,500 individual) and a $5k/$10k out-of-pocket cap, so your worst case is capped and predictable.');
+    if(a.cashTight) out.push('You never have to front a large deductible before common visits — you just pay the copay.');
+    out.push('Costs more in premium than the HDHP, but you\'re buying certainty.');
+  } else {
+    out.push('Copays for everyday visits with a moderate premium.');
+    out.push('A middle-ground option between the low-premium HDHP and the richer Buy Up plan.');
+  }
+  return out;
+}
+
+/* ---------------- Render result ---------------- */
+function render(a){
+  const r = recommend(a);
+  const pick = r.pick;
+  const pd = PLANS[pick];
+  const c = r.costs[pick];
+
+  document.getElementById('recName').innerHTML =
+    pd.name + ' <span class="pill" style="background:'+pd.color+'26;color:'+pd.ink+'">'+pd.tag+'</span>';
+
+  const why = document.getElementById('recWhy'); why.innerHTML='';
+  reasons(a,r).forEach(txt=>{
+    const d=document.createElement('div');
+    d.innerHTML='<span class="tick">✓</span><span>'+txt+'</span>';
+    why.appendChild(d);
+  });
+
+  document.getElementById('recCost').textContent = money(c.net);
+  document.getElementById('recNote').innerHTML =
+    (pick==='hdhp' && c.hsaLeft>0 ? '+ '+money(c.hsaLeft)+' left in your HSA' : '') +
+    '<br><span style="color:var(--muted);font-weight:600">'+TIER_LABEL[a.tier]+' · '+a.usageLabel+'</span>';
+
+  // ranked bars
+  const max = Math.max(...r.ranked.map(k=>r.costs[k].net), 1);
+  const ranks = document.getElementById('ranks'); ranks.innerHTML='';
+  r.ranked.forEach((k,i)=>{
+    const cost=r.costs[k], p=PLANS[k];
+    const row=document.createElement('div');
+    row.className='rrow'+(i===0?' win':'');
+    row.innerHTML =
+      '<div class="rname"><span class="dot" style="background:'+p.color+'"></span>'+p.short+(k===pick?' ⭐':'')+'</div>'+
+      '<div class="track"><div class="fill" style="width:0%;background:'+p.color+(i===0?'':'99')+'"></div></div>'+
+      '<div class="rval">'+money(cost.net)+'</div>';
+    ranks.appendChild(row);
+    requestAnimationFrame(()=>{ setTimeout(()=>{ row.querySelector('.fill').style.width = Math.max(8,(cost.net/max)*100)+'%'; },40); });
+  });
+
+  // tradeoff line
+  const td = document.getElementById('tradeoff');
+  const cheapest = r.ranked[0], save = r.costs[r.ranked[2]].net - r.costs[cheapest].net;
+  if(pick==='hdhp'){
+    td.innerHTML='<span>💡</span><span>The HDHP is the cheapest option here by about <b>'+money(save)+'</b> vs. the priciest plan. The trade-off: you may need to front up to your deductible before coverage kicks in — the HSA gift helps cushion that. Want fixed copays instead? Look at the Buy&nbsp;Up plan.</span>';
+  } else if(pick==='buyup'){
+    const diff = r.costs['buyup'].net - r.costs['hdhp'].net;
+    td.innerHTML='<span>💡</span><span>You\'re trading roughly <b>'+money(Math.max(0,diff))+'</b> more per year for predictability — fixed copays and no surprise coinsurance. If you can handle a bigger upfront deductible, the <b>HDHP</b> would save you that money.</span>';
+  } else {
+    td.innerHTML='<span>💡</span><span>The Base plan sits in the middle. If cost is your priority, compare it against the <b>HDHP</b>; if predictability is, compare against the <b>Buy&nbsp;Up</b>.</span>';
+  }
+
+  const res=document.getElementById('result');
+  res.classList.remove('hide');
+  res.scrollIntoView({behavior:'smooth', block:'start'});
+}
+
+/* ---------------- Scenario cards (real HR data) ---------------- */
+const SCEN = [
+  {emoji:'🏃', name:'Jeff', desc:'Single, no kids. Considers himself healthy — exercises, eats well, no regular meds, rarely sees a doctor.',
+   costs:{hdhp:0, base:34, buyup:941}, tier:'Employee only'},
+  {emoji:'👩‍👧‍👦', name:'Jennifer', desc:'Mom of two active kids. Generally healthy, takes one maintenance prescription, and one accident-prone kid means a yearly urgent-care visit.',
+   costs:{hdhp:2855, base:6794, buyup:9297}, tier:'Employee + children'},
+  {emoji:'🏥', name:'Susana', desc:'Married, four kids. Lifelong asthma with ER visits, husband with heart issues, and several medications across the whole family — a heavy year.',
+   costs:{hdhp:12189, base:12721, buyup:15543}, tier:'Employee + family'}
+];
+const TACO = '<svg viewBox="0 0 800 606" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M668.039 539.944L68.7085 605.832C59.4028 605.829 50.2959 603.139 42.4822 598.085C34.6686 593.031 28.4805 585.828 24.6616 577.342C20.8427 568.856 19.5555 559.447 20.9545 550.247C22.3536 541.047 26.3795 532.447 32.5484 525.48C142.565 400.135 372.358 127.75 585.286 127.75C629.391 127.743 672.588 140.284 709.831 163.911C841.607 246.663 800.615 395.303 762.855 478.056C754.557 496.309 741.233 511.822 724.443 522.782C707.652 533.741 688.088 539.694 668.039 539.944V539.944Z" fill="#FFBC00"/><path d="M584.51 63.4882C357.917 63.4882 133.756 311.745 7.61169 455.586C1.90938 446.764 -0.709322 436.302 0.16492 425.834C1.03916 415.366 5.35708 405.483 12.4437 397.729C122.492 272.385 352.285 0 565.214 0C609.319 -0.00794129 652.515 12.5337 689.758 36.1601C724.208 57.0339 751.195 88.2428 766.878 125.344C759.741 119.564 752.261 114.221 744.478 109.344C696.529 79.2997 641.062 63.425 584.478 63.5522" fill="#FFBC00"/></svg>';
+function buildScen(){
+  const wrap=document.getElementById('scenCards');
+  SCEN.forEach(s=>{
+    const max=Math.max(s.costs.hdhp,s.costs.base,s.costs.buyup,1);
+    const win=Object.keys(s.costs).sort((a,b)=>s.costs[a]-s.costs[b])[0];
+    const bar=(k)=>`<div class="bar">
+        <span style="color:${PLANS[k].ink};font-weight:700">${PLANS[k].short}</span>
+        <div class="bt"><div class="bf" style="width:${Math.max(4,(s.costs[k]/max)*100)}%;background:${PLANS[k].color}${k===win?'':'99'}"></div></div>
+        <span class="bv">${money(s.costs[k])}</span></div>`;
+    const card=document.createElement('div');
+    card.className='card';
+    card.innerHTML=`
+      <div class="who"><div class="avatar">${TACO}</div><div><h3>${s.name}</h3>
+        <div style="font-size:12px;color:var(--muted);font-weight:600">${s.tier}</div></div></div>
+      <div class="desc">${s.desc}</div>
+      <div class="bars">${bar('hdhp')}${bar('base')}${bar('buyup')}</div>
+      <div class="winline">✓ Cheapest: ${PLANS[win].name.replace(' (Base)','').replace('UHC ','')}</div>`;
+    wrap.appendChild(card);
+  });
+}
+
+/* ---------------- Wire up ---------------- */
+document.getElementById('findBtn').addEventListener('click',()=>{
+  const t=document.getElementById('scenario').value.trim();
+  if(t.length<3){ document.getElementById('scenario').focus(); return; }
+  render(analyze(t));
+});
+document.getElementById('resetBtn').addEventListener('click',()=>{
+  document.getElementById('scenario').value='';
+  document.getElementById('result').classList.add('hide');
+  document.getElementById('scenario').focus();
+});
+document.querySelectorAll('#chips .chip').forEach(ch=>{
+  ch.addEventListener('click',()=>{
+    document.getElementById('scenario').value=ch.dataset.fill;
+    render(analyze(ch.dataset.fill));
+  });
+});
+document.getElementById('scenario').addEventListener('keydown',e=>{
+  if((e.metaKey||e.ctrlKey)&&e.key==='Enter') document.getElementById('findBtn').click();
+});
+buildScen();
+</script>
+</body>
+</html>
