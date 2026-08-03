@@ -414,11 +414,24 @@ function analyze(t){
   const babyEvent = has('baby','pregnan','expecting','due ','newborn','having a child','deliver');
   const surgery   = has('surgery','operation','procedure','knee','hip','acl','shoulder','replacement','planned');
 
+  // Is the employee only covering themselves? (dependents on someone else's plan, or explicit self-only)
+  const selfOnly = has(
+    'me on my plan','just me on my plan','just be me on my plan','only me on my plan','just myself on my plan',
+    'only covering myself','just covering myself','only cover myself','cover only myself','just my own plan',
+    'employee only','employee-only','self-only','self only','individual coverage','individual plan',
+    "husband's insurance","husband's plan","wife's insurance","wife's plan","spouse's insurance","spouse's plan","partner's insurance","partner's plan",
+    'on his insurance','on her insurance','on his plan','on her plan','his own plan','her own plan','their own plan','their own insurance',
+    'under my husband','under my wife','under my spouse','under his plan','under her plan',
+    'not on mine','not on my plan','covered elsewhere'
+  );
+
   // coverage tier
   let tier = 'single';
   if(spouse && kids) tier='family';
   else if(kids) tier='kids';
   else if(spouse) tier='couple';
+  // Explicit self-only coverage overrides — dependents are covered elsewhere, so it's Employee-only
+  if(selfOnly) tier='single';
 
   // usage level
   const heavyFam = has('chronic','asthma','diabet','heart','cancer','several medic','multiple medic','lots of','er trip','emergency','four kids','many','frequent','every year it','plagued');
@@ -560,7 +573,7 @@ const BENEFITS = [
     options:['Waive','Just you','You + family'],
     general:{badge:'consider',label:'Consider',why:'Good value for active households or kids in sports; the cash helps cover your HDHP deductible.'},
     forYou:(a,r)=>{
-      if(a.kids||a.heavyFam) return {badge:'consider',label:'Worth a look',why:`With kids around this is worth it — active kids mean ER trips, and it pays cash per injury (avg ~$2,100–$2,400) that offsets your deductible.`};
+      if((a.kids && a.tier!=='single')||a.heavyFam) return {badge:'consider',label:'Worth a look',why:`With kids around this is worth it — active kids mean ER trips, and it pays cash per injury (avg ~$2,100–$2,400) that offsets your deductible.`};
       if(a.babyEvent) return {badge:'opt',label:'Later, not now',why:`Optional today, but handy once the little one is walking. Pays cash per accident that offsets your HDHP deductible.`};
       return {badge:'opt',label:'Probably skip',why:`Skippable unless you\'re very active or accident-prone.`};
     }},
