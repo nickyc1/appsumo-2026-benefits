@@ -80,6 +80,8 @@
   .cov{border:1.5px solid var(--line);background:#fff;border-radius:999px;padding:7px 13px;font-size:13px;font-weight:600;color:var(--ink-soft);cursor:pointer;font-family:'Barlow';transition:.12s}
   .cov:hover{border-color:var(--ink);color:var(--ink)}
   .cov.active{background:var(--ink);color:#fff;border-color:var(--ink)}
+  .events{margin-top:10px;display:flex;align-items:center;gap:9px 12px;flex-wrap:wrap}
+  .evt.active::before{content:'✓ '}
   .go{margin-top:14px;display:flex;gap:10px;flex-wrap:wrap}
   .btn{border:none;cursor:pointer;font-family:'Barlow';font-weight:700;font-size:16px;border-radius:12px;padding:14px 26px;transition:.15s}
   .btn.primary{background:var(--accent);color:#000}
@@ -259,6 +261,14 @@
           <button type="button" class="cov" data-tier="family">+ Family</button>
         </div>
       </div>
+      <div class="events">
+        <span class="cov-label">Big things this year?</span>
+        <div class="cov-opts" id="evtOpts">
+          <button type="button" class="cov evt" data-evt="baby">🍼 Expecting a baby</button>
+          <button type="button" class="cov evt" data-evt="surgery">🩺 Planned surgery</button>
+          <button type="button" class="cov evt" data-evt="chronic">💊 Chronic condition</button>
+        </div>
+      </div>
       <div class="go">
         <button class="btn primary" id="findBtn">Build my plan →</button>
         <button class="btn ghost" id="resetBtn">Clear</button>
@@ -421,6 +431,19 @@ const CARE = {
   highFamily:   {hdhp:10000, base:12000, buyup:10000}   // whole-family heavy -> family OOP max
 };
 
+/* ---------------- Usage level from the final flags ---------------- */
+function computeUsage(a){
+  let usage='moderate', usageLabel='moderate use';
+  if(a.babyEvent || a.surgery){ usage='highOne'; usageLabel='a major planned event'; }
+  if(a.heavyFam){ usage='highFamily'; usageLabel='heavy, ongoing medical use'; }
+  // one person can only hit their individual out-of-pocket max, not a family one
+  if(usage==='highFamily' && a.tier==='single'){ usage='highOne'; }
+  else if(a.lowUse && !a.babyEvent && !a.surgery && !a.heavyFam){ usage='low'; usageLabel='light use — you rarely need care'; }
+  else if(a.moderate && !a.babyEvent && !a.surgery && !a.heavyFam){ usage='moderate'; usageLabel='moderate use'; }
+  a.usage=usage; a.usageLabel=usageLabel;
+  return a;
+}
+
 /* ---------------- Parse the scenario ---------------- */
 function analyze(t){
   t = ' ' + t.toLowerCase() + ' ';
@@ -455,21 +478,13 @@ function analyze(t){
   const moderate = has('maintenance','birth control','occasional','a few','some medic','allergi','urgent care','one prescription','generally healthy','sports','accident');
   const lowUse   = has('healthy','rarely','never sick','no medic','no medication','fit','exercise','barely','don\'t go to the doctor');
 
-  let usage='moderate', usageLabel='moderate use';
-  if(babyEvent || surgery){ usage='highOne'; usageLabel='a major planned event'; }
-  if(heavyFam){ usage='highFamily'; usageLabel='heavy, ongoing medical use'; }
-  // A single person can only hit their individual out-of-pocket max, not a family one
-  if(usage==='highFamily' && tier==='single'){ usage='highOne'; }
-  else if(lowUse && !babyEvent && !surgery){ usage='low'; usageLabel='light use — you rarely need care'; }
-  else if(moderate && !babyEvent && !surgery && !heavyFam){ usage='moderate'; usageLabel='moderate use'; }
-
   // preferences
   const wantsPredictable = has('predictable','no surprise','hate surprise','fixed cost','budget','peace of mind','simple','copay only','known cost');
   const cashTight = has('can\'t afford','cant afford','no savings','don\'t have much saved','tight','cash flow','can\'t front','cant front','paycheck to paycheck','little saved');
   const hasSavings = has('savings','can cover','have money','emergency fund','we have savings','afford the deductible');
 
-  return {tier, usage, usageLabel, babyEvent, surgery, heavyFam, lowUse,
-          wantsPredictable, cashTight, hasSavings, spouse, kids, raw:t.trim()};
+  return computeUsage({tier, babyEvent, surgery, heavyFam, moderate, lowUse,
+          wantsPredictable, cashTight, hasSavings, spouse, kids, raw:t.trim()});
 }
 
 /* ---------------- Cost model (mirrors HR's method) ---------------- */
@@ -719,22 +734,26 @@ function buildScen(){
 
 /* ---------------- Wire up ---------------- */
 let tierOverride='auto', lastText='', hasBuilt=false;
+const eventOverrides={baby:null, surgery:null, chronic:null};
 const TIER_SHORT={single:'Just me', couple:'+ Spouse', kids:'+ Kids', family:'+ Family'};
 
-// Manual coverage pick wins over whatever the text-parser guessed
+// Manual picks win over whatever the text-parser guessed
 function buildAnalysis(text){
   const a=analyze(text);
-  if(tierOverride!=='auto'){
-    a.tier=tierOverride;
-    if(a.usage==='highFamily' && a.tier==='single') a.usage='highOne'; // one person caps at the individual max
-  }
+  if(tierOverride!=='auto') a.tier=tierOverride;
+  if(eventOverrides.baby!==null)    a.babyEvent=eventOverrides.baby;
+  if(eventOverrides.surgery!==null) a.surgery=eventOverrides.surgery;
+  if(eventOverrides.chronic!==null) a.heavyFam=eventOverrides.chronic;
+  computeUsage(a);   // recompute usage from the final flags
   return a;
 }
+function setEvt(key,on){ const el=document.querySelector('#evtOpts .evt[data-evt="'+key+'"]'); if(el) el.classList.toggle('active', !!on); }
 function applyPlan(text){
   const a=buildAnalysis(text);
   renderPlan(a);
-  // On Auto, show what it detected so it's easy to spot & correct
+  // Show what it detected so it's easy to spot & correct
   document.getElementById('autoCov').textContent = (tierOverride==='auto') ? 'Auto: '+TIER_SHORT[a.tier] : 'Auto';
+  setEvt('baby', a.babyEvent); setEvt('surgery', a.surgery); setEvt('chronic', a.heavyFam);
   return a;
 }
 function runFinder(text){
@@ -750,8 +769,10 @@ document.getElementById('findBtn').addEventListener('click',()=>{
 document.getElementById('resetBtn').addEventListener('click',()=>{
   document.getElementById('scenario').value='';
   tierOverride='auto'; lastText=''; hasBuilt=false;
+  eventOverrides.baby=eventOverrides.surgery=eventOverrides.chronic=null;
   document.querySelectorAll('#covOpts .cov').forEach(b=>b.classList.toggle('active', b.dataset.tier==='auto'));
   document.getElementById('autoCov').textContent='Auto';
+  document.querySelectorAll('#evtOpts .evt').forEach(b=>b.classList.remove('active'));
   renderPlan(null);
   document.getElementById('scenario').focus();
 });
@@ -766,6 +787,14 @@ document.querySelectorAll('#covOpts .cov').forEach(btn=>{
     tierOverride=btn.dataset.tier;
     document.querySelectorAll('#covOpts .cov').forEach(b=>b.classList.toggle('active', b===btn));
     if(hasBuilt) applyPlan(lastText);   // re-render in place, no scroll jump
+  });
+});
+document.querySelectorAll('#evtOpts .evt').forEach(btn=>{
+  btn.addEventListener('click',()=>{
+    const key=btn.dataset.evt, nowOn=!btn.classList.contains('active');
+    eventOverrides[key]=nowOn;
+    btn.classList.toggle('active', nowOn);
+    if(hasBuilt) applyPlan(lastText);
   });
 });
 document.getElementById('scenario').addEventListener('keydown',e=>{
