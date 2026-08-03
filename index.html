@@ -176,6 +176,23 @@
   .enote{margin-top:11px;background:#FFF6D6;border-left:3px solid var(--accent);padding:9px 13px;border-radius:0 8px 8px 0;font-size:13.5px;color:var(--ink-soft)}
   .enote b{color:var(--ink)}
   @media(max-width:560px){.election{grid-template-columns:40px 1fr;gap:13px;padding:17px}.election .num{width:40px;height:40px;font-size:18px}}
+  .ecar{font-size:11px;font-weight:700;color:var(--muted);background:#EEF2F1;padding:3px 8px;border-radius:6px}
+  .edecide{font-size:14.5px;margin-top:8px}
+  .eoptions{display:flex;flex-wrap:wrap;gap:7px;margin-top:11px}
+  .eoptions .lbl{font-size:12px;font-weight:700;color:var(--muted);align-self:center;margin-right:2px}
+  .opt{font-size:12.5px;font-weight:600;color:var(--ink-soft);background:#F1F5F4;border:1px solid var(--line);border-radius:999px;padding:5px 11px}
+  .foryou{margin-top:13px;background:#FFF7DB;border:1px solid #F1DE9E;border-radius:12px;padding:13px 15px;font-size:14.5px;line-height:1.55}
+  .fy-tag{display:inline-block;font-weight:800;color:#8a6d00;margin-right:5px}
+  .fy-head{font-size:16px;margin-bottom:2px}
+  .fy-sub{font-weight:700;color:var(--good);font-size:13px;margin-left:4px}
+  .fy-reasons{margin-top:9px;display:grid;gap:6px}
+  .fy-reasons div{display:flex;gap:9px;font-size:13.5px;color:var(--ink-soft)}
+  .fy-reasons .tick{color:var(--good);font-weight:800;flex:0 0 auto}
+  .ranking-inline{margin-top:13px}
+  .ranking-inline h4{font-size:11.5px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin-bottom:9px;font-weight:700}
+  .tradeoff-inline{margin-top:12px;font-size:13px;color:var(--ink-soft);line-height:1.5}
+  .election.featured{border-color:#F1DE9E;box-shadow:0 1px 2px rgba(20,16,8,.05),0 16px 40px -16px rgba(255,188,0,.4)}
+  #plan{scroll-margin-top:112px}
   .finalcta{margin-top:26px;background:var(--ink);color:#e9efed;border-radius:16px;padding:22px 24px;display:flex;gap:16px 20px;align-items:center;flex-wrap:wrap}
   .finalcta .fbig{font-family:'Barlow';font-weight:800;font-size:20px;color:#fff}
   .finalcta .fsub{font-size:14px;color:#aeb9b7;margin-top:2px}
@@ -211,8 +228,8 @@
 <div class="hero">
   <div class="wrap">
     <div class="kicker">Open Enrollment · Sept 1 2026 – Aug 31 2027</div>
-    <h1>Which medical plan is <em>right for you?</em></h1>
-    <p class="sub">Tell us about your life — your family, your health, what you expect this year. We'll match you to one of AppSumo's three UnitedHealthcare plans and show you what it'd likely cost.</p>
+    <h1>Which benefits are <em>right for you?</em></h1>
+    <p class="sub">Tell us about your life — your family, your health, what you expect this year. We'll walk every 2026 election in order, starting with medical, and tell you exactly what we'd pick for your situation.</p>
 
     <div class="finder">
       <label for="scenario">Describe your situation in a sentence or two</label>
@@ -226,38 +243,30 @@
         <button class="chip" data-fill="Planning knee surgery this year. Single, want to keep my out-of-pocket predictable and I don't have much saved.">🩺 Planned surgery</button>
       </div>
       <div class="go">
-        <button class="btn primary" id="findBtn">Find my plan →</button>
+        <button class="btn primary" id="findBtn">Build my plan →</button>
         <button class="btn ghost" id="resetBtn">Clear</button>
       </div>
     </div>
-    <p class="jump">Medical is the big decision — but there are more boxes to check. <a href="#elections">Jump to the full election checklist ↓</a></p>
+    <p class="jump">Or skip ahead — <a href="#plan">see your recommendation for every election ↓</a></p>
   </div>
 </div>
 
-<!-- RESULT -->
-<div class="wrap">
-  <div id="result" class="hide">
-    <div class="result-card">
-      <div class="result-top">
-        <div style="flex:1;min-width:240px">
-          <div class="rec-flag">Your best-fit plan</div>
-          <div class="rec-name" id="recName">—</div>
-          <div class="rec-why" id="recWhy"></div>
-        </div>
-        <div class="rec-cost">
-          <div class="lab">Est. cost this year</div>
-          <div class="big" id="recCost">—</div>
-          <div class="note" id="recNote"></div>
-        </div>
+<!-- PERSONALIZED PLAN -->
+<section class="block" id="plan">
+  <div class="wrap">
+    <div class="eyebrow">Your recommendations</div>
+    <div class="h2">Which benefits are right for you?</div>
+    <p class="lead" id="planLead"></p>
+    <div class="elections-list" id="electionsList"></div>
+    <div class="finalcta">
+      <div>
+        <div class="fbig">Make your elections in Insperity by Friday, Aug 7</div>
+        <div class="fsub">This is an active enrollment — no elections means no benefits on Sept 1. Log in with your usual Insperity credentials.</div>
       </div>
-      <div class="ranking">
-        <h4>How all three compare for your situation (estimated total for the year)</h4>
-        <div id="ranks"></div>
-      </div>
-      <div class="tradeoff" id="tradeoff"></div>
+      <a class="btn primary" href="https://digital.nfp.com/vlp/AppSumoBenefits2026" target="_blank" rel="noopener">Open the benefits site →</a>
     </div>
   </div>
-</div>
+</section>
 
 <!-- PLANS -->
 <section class="block" id="plans">
@@ -352,148 +361,6 @@
           <tr><td>Employee / +spouse / +kids / family</td><td>$1,200 / $1,800 / $2,100 / $2,400</td><td>Not eligible</td><td>Not eligible</td></tr>
         </tbody>
       </table>
-    </div>
-  </div>
-</section>
-
-<!-- ELECTION CHECKLIST -->
-<section class="block" id="elections" style="background:#fff">
-  <div class="wrap">
-    <div class="eyebrow">Your action list</div>
-    <div class="h2">Every election — and what we'd pick</div>
-    <p class="lead">Open enrollment is <b>active</b>. You must make these choices in Insperity by <b>Friday, Aug 7</b> or you'll have no benefits on Sept 1. Here's every decision in order, each with a plain recommendation. These are general suggestions — your call depends on your situation.</p>
-
-    <div class="elections-list">
-
-      <div class="election">
-        <div class="num">1</div>
-        <div>
-          <div class="etitle">Medical plan <span class="ebadge must">Must decide</span></div>
-          <div class="ewhat">UHC Choice HDHP · Choice+ PPO (Base) · Choice+ PPO Buy Up — pick one.</div>
-          <div class="epick"><span class="pk">Our pick:</span> For most people, the <b>HDHP</b> — lowest premiums, $1,200–$2,400 of free HSA money, and it came out cheapest in every scenario HR modeled. Use the finder at the top of this page for your own situation. Choose the <b>Buy Up</b> only if you want fixed copays and can't front a deductible.</div>
-          <div class="enote">👶 <b>Growing your family?</b> Even with a delivery, the HDHP still wins if you have savings for upfront costs. New for 2026: every plan includes a <b>doula allowance</b> and <b>chiropractic care</b>.</div>
-        </div>
-      </div>
-
-      <div class="election">
-        <div class="num">2</div>
-        <div>
-          <div class="etitle">HSA contribution <span class="ebadge must">Decide if HDHP</span></div>
-          <div class="ewhat">Through isolved — only relevant if you choose the HDHP. Triple tax-free (in, grows, and out for medical/dental/vision).</div>
-          <div class="epick"><span class="pk">Our pick:</span> Contribute at least enough per paycheck (pre-tax) to cover your deductible, so a big bill never stings. The 2026 max — <b>your money + AppSumo's</b> — is <b>$4,400</b> self-only / <b>$8,750</b> family. Even $50–$100 a paycheck compounds tax-free and is yours to keep.</div>
-        </div>
-      </div>
-
-      <div class="election">
-        <div class="num">3</div>
-        <div>
-          <div class="etitle">Dental (Unum) <span class="ebadge rec">Recommended</span></div>
-          <div class="ewhat">$1,500/yr per person · cleanings, exams & X-rays 100% free · basic 80% · major 50% · ortho $1,500 lifetime.</div>
-          <div class="epick"><span class="pk">Our pick:</span> <b>Enroll.</b> Preventive care is free and premiums are low — it pays for itself at two cleanings a year. Match the coverage tier (you / +spouse / +kids / family) to your medical.</div>
-        </div>
-      </div>
-
-      <div class="election">
-        <div class="num">4</div>
-        <div>
-          <div class="etitle">Vision (Unum) <span class="ebadge rec">Recommended if you wear glasses</span></div>
-          <div class="ewhat">Exam + lenses yearly, frames every 12/24 months, $130 frame allowance (+20% off any overage). Glasses or contacts — not both.</div>
-          <div class="epick"><span class="pk">Our pick:</span> <b>Enroll if you or a dependent wears glasses or contacts</b> — the premium is a few dollars and usually less than one exam plus lenses. Skip only if no one in the household needs corrective lenses.</div>
-        </div>
-      </div>
-
-      <div class="election">
-        <div class="num">5</div>
-        <div>
-          <div class="etitle">Basic Life &amp; AD&amp;D (Unum) <span class="ebadge auto">Automatic · just review</span></div>
-          <div class="ewhat">$50,000, 100% paid by AppSumo — you're already covered, nothing to buy.</div>
-          <div class="epick"><span class="pk">Our pick:</span> Nothing to elect, but <b>log in and name (or update) your beneficiaries</b>. Don't skip this one — it's the step people forget.</div>
-        </div>
-      </div>
-
-      <div class="election">
-        <div class="num">6</div>
-        <div>
-          <div class="etitle">Voluntary Life &amp; AD&amp;D (Unum) <span class="ebadge consider">Consider — this year only</span></div>
-          <div class="ewhat">Up to $300k for you, $100k spouse, $10k child, on top of the free $50k.</div>
-          <div class="epick"><span class="pk">Our pick:</span> If anyone depends on your income, elect up to the <b>$100,000 guaranteed-issue</b> now — <b>no medical questions are asked in this first Unum year</b>, a window that won't come back. Later increases can require underwriting.</div>
-          <div class="enote">👶 <b>Starting or growing a family?</b> This is the easiest year you'll ever get to lock in extra life coverage with zero health questions.</div>
-        </div>
-      </div>
-
-      <div class="election">
-        <div class="num">7</div>
-        <div>
-          <div class="etitle">Short-Term Disability (Unum) <span class="ebadge rec">Recommended · now or never</span></div>
-          <div class="ewhat">Pays 60% of your income up to $1,000/week for up to 25 weeks if you're too sick or injured to work.</div>
-          <div class="epick"><span class="pk">Our pick:</span> <b>Elect it during open enrollment.</b> If you skip it now, there's a <b>one-year waiting period</b> before you can get it later. Note: AppSumo may continue your salary during leave, which can offset STD (they don't stack on top of each other).</div>
-          <div class="enote">👶 <b>Any chance of maternity leave in the next year?</b> This is the one to get in — the one-year waiting period makes it now-or-never.</div>
-        </div>
-      </div>
-
-      <div class="election">
-        <div class="num">8</div>
-        <div>
-          <div class="etitle">Long-Term Disability (Unum) <span class="ebadge rec">Recommended</span></div>
-          <div class="ewhat">Picks up where STD ends — 60% of monthly income up to $6,000/month, potentially to age 65.</div>
-          <div class="epick"><span class="pk">Our pick:</span> <b>Elect it</b> — inexpensive income protection for a serious injury or illness. Pair it with STD so the waiting period is already covered.</div>
-        </div>
-      </div>
-
-      <div class="election">
-        <div class="num">9</div>
-        <div>
-          <div class="etitle">Accident coverage (Unum) <span class="ebadge consider">Consider</span></div>
-          <div class="ewhat">Cash payouts per injury — ER, ambulance, X-rays, PT, etc. Average payout ~$2,100–$2,400. Replaces the old Aflac plan.</div>
-          <div class="epick"><span class="pk">Our pick:</span> Worth it if you have <b>kids in sports</b> or an active, accident-prone household. Pairs nicely with the HDHP — the cash helps cover your deductible.</div>
-        </div>
-      </div>
-
-      <div class="election">
-        <div class="num">10</div>
-        <div>
-          <div class="etitle">Critical Illness (Unum) <span class="ebadge opt">Optional</span></div>
-          <div class="ewhat">Lump sum of $10k–$30k if you're diagnosed with a major illness (heart attack, stroke, cancer, kidney/organ failure…).</div>
-          <div class="epick"><span class="pk">Our pick:</span> Consider it if you have a <b>family history</b> of the covered conditions or want extra cushion against a big diagnosis. Otherwise skippable.</div>
-        </div>
-      </div>
-
-      <div class="election">
-        <div class="num">11</div>
-        <div>
-          <div class="etitle">Hospital Indemnity (Unum) <span class="ebadge consider">Consider</span></div>
-          <div class="ewhat">Cash for a hospital stay: $1,500 on admission + $100/day ($3,000 for ICU + $200/day). Pays only if you're admitted.</div>
-          <div class="epick"><span class="pk">Our pick:</span> A strong add-on if a hospital stay is likely this year.</div>
-          <div class="enote">👶 <b>A childbirth is a hospital admission</b> — this pays cash on delivery that directly offsets your HDHP deductible. If you're expecting, this one can pay for itself.</div>
-        </div>
-      </div>
-
-      <div class="election">
-        <div class="num">12</div>
-        <div>
-          <div class="etitle">Free programs <span class="ebadge auto">Included · good to know</span></div>
-          <div class="ewhat">EAP (Health Advocate — counseling, virtual therapy, a medical bill saver, 24/7 clinicians) and Assist America travel assistance worldwide. Both free, no election.</div>
-          <div class="epick"><span class="pk">Our pick:</span> Nothing to elect — just save the numbers from the benefits site so you have them when you need them.</div>
-        </div>
-      </div>
-
-      <div class="election">
-        <div class="num">13</div>
-        <div>
-          <div class="etitle">Optional extras <span class="ebadge opt">Your call</span></div>
-          <div class="ewhat">Pet insurance (Wishbone, 70–80% reimbursement) and Insure Choice — a marketplace for auto, home, renters, legal and travel coverage.</div>
-          <div class="epick"><span class="pk">Our pick:</span> Nice-to-haves — buy only if you need them. These are <b>direct-bill, not payroll-deducted</b>, so they won't touch your paycheck.</div>
-        </div>
-      </div>
-
-    </div>
-
-    <div class="finalcta">
-      <div>
-        <div class="fbig">Make your elections in Insperity by Friday, Aug 7</div>
-        <div class="fsub">This is an active enrollment — no elections means no benefits on Sept 1. Log in with your usual Insperity credentials.</div>
-      </div>
-      <a class="btn primary" href="https://digital.nfp.com/vlp/AppSumoBenefits2026" target="_blank" rel="noopener">Open the benefits site →</a>
     </div>
   </div>
 </section>
@@ -628,58 +495,165 @@ function reasons(a, r){
   return out;
 }
 
-/* ---------------- Render result ---------------- */
-function render(a){
-  const r = recommend(a);
-  const pick = r.pick;
-  const pd = PLANS[pick];
-  const c = r.costs[pick];
+/* ---------------- Benefit definitions (elections 2–13) ---------------- */
+const BENEFITS = [
+  { title:'HSA contribution', carrier:'isolved',
+    decide:'how much of your own pre-tax money to add — only matters if you take the HDHP.',
+    options:['Just the AppSumo gift','A little each paycheck','Up to the IRS max'],
+    general:{badge:'must',label:'Decide if HDHP',why:'If you take the HDHP, add at least enough pre-tax to cover your deductible. 2026 max (you + AppSumo): <b>$4,400</b> self / <b>$8,750</b> family — it rolls over and it\'s yours to keep.'},
+    forYou:(a,r)=>{
+      if(r.pick!=='hdhp') return {badge:'opt',label:'Not needed',why:`Your recommended plan is the <b>${PLANS[r.pick].short}</b>, which isn\'t HSA-eligible — nothing to fund here.`};
+      const gift=money(HSA[a.tier]);
+      if(a.babyEvent) return {badge:'rec',label:'★ Fund it',why:`This is the big one for you. On the HDHP with a baby coming, put about your individual deductible — <b>$5,000</b> — in pre-tax this year so the delivery is paid with tax-free dollars. AppSumo already adds <b>${gift}</b> free.`};
+      if(a.surgery) return {badge:'rec',label:'★ Fund it',why:`With a planned procedure on the HDHP, pre-load about <b>$5,000</b> (your individual max) so it\'s paid tax-free. AppSumo adds <b>${gift}</b> on top.`};
+      if(a.heavyFam) return {badge:'rec',label:'★ Fund it',why:`Heavy year ahead — fund toward your deductible so the big bills come out pre-tax. AppSumo adds <b>${gift}</b>.`};
+      return {badge:'rec',label:'Recommended',why:`You\'re on the HDHP, so AppSumo gives you <b>${gift}</b> free. Add what you comfortably can — even $50–$100 a paycheck compounds tax-free and rolls over.`};
+    }},
+  { title:'Dental', carrier:'Unum',
+    decide:'whether to enroll, and at what coverage tier.',
+    options:['Waive','You','+ spouse','+ kids / family'],
+    general:{badge:'rec',label:'Recommended',why:'<b>Enroll.</b> Cleanings, exams and X-rays are 100% free and it pays for itself at two cleanings a year.'},
+    forYou:(a,r)=>{
+      const who = a.tier==='single'?'just you':a.tier==='couple'?'you + your spouse':a.tier==='kids'?'you + your kids':'your whole family';
+      let w=`<b>Enroll</b> at the <b>${TIER_LABEL[a.tier]}</b> tier (${who}) — preventive is free and premiums are low.`;
+      if(a.babyEvent) w+=` Cover your spouse now; add the baby within 30 days of birth.`;
+      return {badge:'rec',label:'★ Recommended for you',why:w};
+    }},
+  { title:'Vision', carrier:'Unum',
+    decide:'whether to enroll — only worth it if someone wears glasses or contacts.',
+    options:['Waive','You','+ spouse','+ kids / family'],
+    general:{badge:'consider',label:'If you wear glasses',why:'Enroll if you or a dependent wears glasses or contacts; skip if nobody needs corrective lenses.'},
+    forYou:(a,r)=>({badge:'consider',label:'Your call',why:`Only you know this one — enroll at the <b>${TIER_LABEL[a.tier]}</b> tier <b>if you or your ${a.spouse?'spouse':'household'} wear glasses or contacts</b> (the premium is a few dollars). Otherwise waive it.`})},
+  { title:'Basic Life &amp; AD&amp;D', carrier:'Unum',
+    decide:'nothing to buy — but you must name your beneficiaries.',
+    options:['Review / update beneficiaries'],
+    general:{badge:'auto',label:'Automatic',why:'Free $50k coverage. Just log in and name your beneficiaries.'},
+    forYou:(a,r)=>{
+      let w=`You already have <b>$50k free</b>. Log in and set your beneficiaries.`;
+      if(a.babyEvent) w+=` List your spouse now, and add the baby once they arrive.`;
+      else if(a.spouse) w+=` Make sure your spouse is listed.`;
+      return {badge:'auto',label:'Do this — 2 min',why:w};
+    }},
+  { title:'Voluntary Life &amp; AD&amp;D', carrier:'Unum',
+    decide:'whether to buy extra life insurance on top of the free $50k, and how much.',
+    options:['Waive','Up to $100k (no questions)','Up to $300k (may need underwriting)'],
+    general:{badge:'consider',label:'This year only',why:'If anyone depends on your income, grab up to the $100k guaranteed-issue now — no medical questions this first Unum year.'},
+    forYou:(a,r)=>{
+      if(a.spouse||a.kids||a.babyEvent) return {badge:'rec',label:'★ Right for you',why:`With ${a.babyEvent?'a baby on the way':a.kids?'kids':'a spouse'} depending on you, take up to the <b>$100,000 guaranteed-issue</b> this year — <b>no medical questions</b> in this first Unum year, a window that won\'t repeat. Consider adding spouse coverage too.`};
+      return {badge:'consider',label:'Optional',why:`No one depends on your income yet, so this is optional — but $100k with zero health questions is the cheapest it\'ll ever be if that\'s about to change.`};
+    }},
+  { title:'Short-Term Disability', carrier:'Unum',
+    decide:'whether to elect it now — skipping means a one-year wait to add it later.',
+    options:['Waive (1-yr wait later)','Elect'],
+    general:{badge:'rec',label:'Now or never',why:'Elect it during OE — skip it and there\'s a one-year waiting period before you can add it.'},
+    forYou:(a,r)=>{
+      if(a.babyEvent) return {badge:'rec',label:'★ Elect now',why:`A must for you — <b>a maternity leave is exactly what STD covers</b> (60% of pay up to $1,000/wk for 25 weeks). Skip it now and you hit a <b>one-year waiting period</b>. Note: AppSumo may continue your salary during leave, which can offset STD (they don\'t stack).`};
+      return {badge:'rec',label:(a.spouse||a.kids)?'★ Elect now':'Recommended',why:`Elect it — the <b>one-year waiting period</b> if you skip makes it now-or-never. Pays 60% of income up to $1,000/wk for 25 weeks.`};
+    }},
+  { title:'Long-Term Disability', carrier:'Unum',
+    decide:'whether to elect long-term coverage that starts when STD ends.',
+    options:['Waive','Elect'],
+    general:{badge:'rec',label:'Recommended',why:'Cheap income protection that continues after STD runs out. Pair the two.'},
+    forYou:(a,r)=>({badge:'rec',label:'Recommended',why:`Elect it alongside STD — 60% of monthly income up to $6,000/mo if something keeps you out long-term${(a.babyEvent||a.kids)?', which matters when a family counts on your paycheck':''}. Inexpensive.`})},
+  { title:'Accident coverage', carrier:'Unum',
+    decide:'whether to add cash payouts per injury (this replaces the old Aflac plan).',
+    options:['Waive','Just you','You + family'],
+    general:{badge:'consider',label:'Consider',why:'Good value for active households or kids in sports; the cash helps cover your HDHP deductible.'},
+    forYou:(a,r)=>{
+      if(a.kids||a.heavyFam) return {badge:'consider',label:'Worth a look',why:`With kids around this is worth it — active kids mean ER trips, and it pays cash per injury (avg ~$2,100–$2,400) that offsets your deductible.`};
+      if(a.babyEvent) return {badge:'opt',label:'Later, not now',why:`Optional today, but handy once the little one is walking. Pays cash per accident that offsets your HDHP deductible.`};
+      return {badge:'opt',label:'Probably skip',why:`Skippable unless you\'re very active or accident-prone.`};
+    }},
+  { title:'Critical Illness', carrier:'Unum',
+    decide:'whether to add a lump-sum payout for a major diagnosis.',
+    options:['Waive','$10k','$20k','$30k'],
+    general:{badge:'opt',label:'Optional',why:'Consider only with a family history of the covered conditions.'},
+    forYou:(a,r)=>{
+      if(a.heavyFam) return {badge:'consider',label:'Consider',why:`With ongoing health issues in the household, a lump sum on a major diagnosis (heart attack, stroke, cancer…) could be worth it.`};
+      return {badge:'opt',label:'Probably skip',why:`Optional — worth it mainly if you have a <b>family history</b> of heart disease, stroke or cancer. Otherwise skip.`};
+    }},
+  { title:'Hospital Indemnity', carrier:'Unum',
+    decide:'whether to add cash-on-admission coverage for a hospital stay.',
+    options:['Waive','Just you','You + family'],
+    general:{badge:'consider',label:'Consider',why:'Great if a hospital stay is likely — a birth is an admission that pays out.'},
+    forYou:(a,r)=>{
+      if(a.babyEvent) return {badge:'rec',label:'★ Right for you',why:`Strong yes — <b>a delivery is a hospital admission</b>, so this pays <b>$1,500 on admission + $100/day</b> in cash that directly offsets your HDHP deductible. For an expected birth it often pays for itself.`};
+      if(a.surgery) return {badge:'rec',label:'★ Worth it',why:`A planned procedure that admits you pays <b>$1,500 + $100/day</b> in cash — helps cover your deductible.`};
+      if(a.heavyFam) return {badge:'consider',label:'Consider',why:`With a lot of medical activity, an admission this year is plausible — this pays cash if it happens.`};
+      return {badge:'opt',label:'Probably skip',why:`Optional unless a hospital stay is likely — it only pays if you\'re admitted.`};
+    }},
+  { title:'Free programs', carrier:'',
+    decide:'nothing to elect — just know they\'re there.',
+    options:['EAP (Health Advocate)','Assist America travel'],
+    general:{badge:'auto',label:'Included',why:'Free counseling, virtual therapy, a bill saver, and worldwide travel help. Save the numbers.'},
+    forYou:(a,r)=>{
+      let w=`Nothing to elect — both are free. Save the EAP and travel-assist numbers from the benefits site.`;
+      if(a.babyEvent) w+=` New-parent tip: the EAP\'s counseling and medical-bill saver come in handy after a delivery.`;
+      return {badge:'auto',label:'Good to know',why:w};
+    }},
+  { title:'Optional extras', carrier:'',
+    decide:'whether to buy pet insurance or shop the Insure Choice marketplace.',
+    options:['Skip','Pet insurance','Insure Choice'],
+    general:{badge:'opt',label:'Your call',why:'Nice-to-haves, direct-bill (not payroll). Buy only if you need them.'},
+    forYou:(a,r)=>({badge:'opt',label:'Your call',why:`Only if you want them — pet insurance (Wishbone) or auto/home/renters via Insure Choice. Both are <b>direct-bill</b>, so they won\'t touch your paycheck.`})}
+];
 
-  document.getElementById('recName').innerHTML =
-    pd.name + ' <span class="pill" style="background:'+pd.color+'26;color:'+pd.ink+'">'+pd.tag+'</span>';
+/* ---------------- Render the personalized plan ---------------- */
+function optionPills(opts){ return '<span class="lbl">Options:</span>'+opts.map(o=>`<span class="opt">${o}</span>`).join(''); }
 
-  const why = document.getElementById('recWhy'); why.innerHTML='';
-  reasons(a,r).forEach(txt=>{
-    const d=document.createElement('div');
-    d.innerHTML='<span class="tick">✓</span><span>'+txt+'</span>';
-    why.appendChild(d);
-  });
-
-  document.getElementById('recCost').textContent = money(c.net);
-  document.getElementById('recNote').innerHTML =
-    (pick==='hdhp' && c.hsaLeft>0 ? '+ '+money(c.hsaLeft)+' left in your HSA' : '') +
-    '<br><span style="color:var(--muted);font-weight:600">'+TIER_LABEL[a.tier]+' · '+a.usageLabel+'</span>';
-
-  // ranked bars
-  const max = Math.max(...r.ranked.map(k=>r.costs[k].net), 1);
-  const ranks = document.getElementById('ranks'); ranks.innerHTML='';
-  r.ranked.forEach((k,i)=>{
-    const cost=r.costs[k], p=PLANS[k];
-    const row=document.createElement('div');
-    row.className='rrow'+(i===0?' win':'');
-    row.innerHTML =
-      '<div class="rname"><span class="dot" style="background:'+p.color+'"></span>'+p.short+(k===pick?' ⭐':'')+'</div>'+
-      '<div class="track"><div class="fill" style="width:0%;background:'+p.color+(i===0?'':'99')+'"></div></div>'+
-      '<div class="rval">'+money(cost.net)+'</div>';
-    ranks.appendChild(row);
-    requestAnimationFrame(()=>{ setTimeout(()=>{ row.querySelector('.fill').style.width = Math.max(8,(cost.net/max)*100)+'%'; },40); });
-  });
-
-  // tradeoff line
-  const td = document.getElementById('tradeoff');
-  const cheapest = r.ranked[0], save = r.costs[r.ranked[2]].net - r.costs[cheapest].net;
-  if(pick==='hdhp'){
-    td.innerHTML='<span>💡</span><span>The HDHP is the cheapest option here by about <b>'+money(save)+'</b> vs. the priciest plan. The trade-off: you may need to front up to your deductible before coverage kicks in — the HSA gift helps cushion that. Want fixed copays instead? Look at the Buy&nbsp;Up plan.</span>';
-  } else if(pick==='buyup'){
-    const diff = r.costs['buyup'].net - r.costs['hdhp'].net;
-    td.innerHTML='<span>💡</span><span>You\'re trading roughly <b>'+money(Math.max(0,diff))+'</b> more per year for predictability — fixed copays and no surprise coinsurance. If you can handle a bigger upfront deductible, the <b>HDHP</b> would save you that money.</span>';
+function medicalItemHTML(a, r){
+  const opts = optionPills(['HDHP (HSA-eligible)','Base PPO','Buy Up PPO']);
+  let body;
+  if(a){
+    const pick=r.pick, pd=PLANS[pick], c=r.costs[pick];
+    const max=Math.max(...r.ranked.map(k=>r.costs[k].net),1);
+    const bars=r.ranked.map((k,i)=>{
+      const cost=r.costs[k], p=PLANS[k];
+      return `<div class="rrow${i===0?' win':''}"><div class="rname"><span class="dot" style="background:${p.color}"></span>${p.short}${k===pick?' ⭐':''}</div><div class="track"><div class="fill" style="width:${Math.max(8,(cost.net/max)*100)}%;background:${p.color}${i===0?'':'99'}"></div></div><div class="rval">${money(cost.net)}</div></div>`;
+    }).join('');
+    const reasonsHTML=reasons(a,r).map(t=>`<div><span class="tick">✓</span><span>${t}</span></div>`).join('');
+    let trade;
+    if(pick==='hdhp'){ const save=r.costs[r.ranked[2]].net-r.costs[r.ranked[0]].net; trade=`The HDHP is the cheapest here by about <b>${money(save)}</b> vs the priciest plan. Trade-off: you may front up to your deductible before coverage kicks in — the HSA gift cushions that.`; }
+    else if(pick==='buyup'){ trade=`You\'re trading about <b>${money(Math.max(0,r.costs.buyup.net-r.costs.hdhp.net))}</b> more a year for fixed copays and no surprises. The HDHP would save that if you can handle a bigger deductible.`; }
+    else { trade=`The Base plan sits in the middle on both cost and predictability.`; }
+    body=`<div class="foryou">
+      <div class="fy-head"><span class="fy-tag">👉 For you</span><b>${pd.name}</b> — est. <b>${money(c.net)}/yr</b>${(pick==='hdhp'&&c.hsaLeft>0)?`<span class="fy-sub">+ ${money(c.hsaLeft)} left in your HSA</span>`:''}</div>
+      <div class="fy-reasons">${reasonsHTML}</div>
+      <div class="ranking-inline"><h4>How all three compare for you (est. total for the year)</h4>${bars}</div>
+      <div class="tradeoff-inline">💡 ${trade}</div>
+    </div>`;
   } else {
-    td.innerHTML='<span>💡</span><span>The Base plan sits in the middle. If cost is your priority, compare it against the <b>HDHP</b>; if predictability is, compare against the <b>Buy&nbsp;Up</b>.</span>';
+    body=`<div class="epick"><span class="pk">General pick:</span> For most people the <b>HDHP</b> — lowest premiums, $1,200–$2,400 free HSA, cheapest in every scenario HR modeled. <b>Describe your situation above</b> for your personalized pick and estimated cost.</div>`;
   }
+  return `<div class="election featured"><div class="num">1</div><div>
+    <div class="etitle">Medical plan <span class="ecar">UnitedHealthcare</span> <span class="ebadge must">Must decide</span></div>
+    <div class="edecide"><b>You're choosing</b> which of the 3 UHC plans to enroll in — it sets your HSA and pairs with several add-ons below.</div>
+    <div class="eoptions">${opts}</div>
+    ${body}
+  </div></div>`;
+}
 
-  const res=document.getElementById('result');
-  res.classList.remove('hide');
-  res.scrollIntoView({behavior:'smooth', block:'start'});
+function benefitHTML(b, n, v, personalized){
+  const verdict = personalized
+    ? `<div class="foryou"><span class="fy-tag">👉 For you</span>${v.why}</div>`
+    : `<div class="epick"><span class="pk">General pick:</span> ${v.why}</div>`;
+  return `<div class="election"><div class="num">${n}</div><div>
+    <div class="etitle">${b.title} ${b.carrier?`<span class="ecar">${b.carrier}</span>`:''} <span class="ebadge ${v.badge}">${v.label}</span></div>
+    <div class="edecide"><b>You're choosing</b> ${b.decide}</div>
+    <div class="eoptions">${optionPills(b.options)}</div>
+    ${verdict}
+  </div></div>`;
+}
+
+function renderPlan(a){
+  const r = a ? recommend(a) : null;
+  document.getElementById('planLead').innerHTML = a
+    ? `Based on what you told us (<b>${TIER_LABEL[a.tier]} · ${a.usageLabel}</b>), here's what we'd pick for every election, in order. These are suggestions — use your own judgment.`
+    : `Describe your situation above and we'll pick for every election. Until then, here's the general guidance, in order — <b>medical first</b>.`;
+
+  let html = medicalItemHTML(a, r);
+  BENEFITS.forEach((b,i)=>{ html += benefitHTML(b, i+2, a ? b.forYou(a,r) : b.general, !!a); });
+  document.getElementById('electionsList').innerHTML = html;
 }
 
 /* ---------------- Scenario cards (real HR data) ---------------- */
@@ -714,25 +688,30 @@ function buildScen(){
 }
 
 /* ---------------- Wire up ---------------- */
+function runFinder(text){
+  renderPlan(analyze(text));
+  document.getElementById('plan').scrollIntoView({behavior:'smooth', block:'start'});
+}
 document.getElementById('findBtn').addEventListener('click',()=>{
   const t=document.getElementById('scenario').value.trim();
   if(t.length<3){ document.getElementById('scenario').focus(); return; }
-  render(analyze(t));
+  runFinder(t);
 });
 document.getElementById('resetBtn').addEventListener('click',()=>{
   document.getElementById('scenario').value='';
-  document.getElementById('result').classList.add('hide');
+  renderPlan(null);
   document.getElementById('scenario').focus();
 });
 document.querySelectorAll('#chips .chip').forEach(ch=>{
   ch.addEventListener('click',()=>{
     document.getElementById('scenario').value=ch.dataset.fill;
-    render(analyze(ch.dataset.fill));
+    runFinder(ch.dataset.fill);
   });
 });
 document.getElementById('scenario').addEventListener('keydown',e=>{
   if((e.metaKey||e.ctrlKey)&&e.key==='Enter') document.getElementById('findBtn').click();
 });
+renderPlan(null);   // default general view on load
 buildScen();
 
 /* ---------------- Enrollment deadline countdown ---------------- */
