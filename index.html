@@ -39,6 +39,12 @@
 
   /* ---------- Header ---------- */
   header{position:sticky;top:0;z-index:50;background:var(--ink);color:#fff}
+  .countbar{background:var(--accent);color:var(--ink);border-bottom:1px solid rgba(0,0,0,.14)}
+  .countbar-inner{display:flex;align-items:center;justify-content:center;gap:12px;min-height:40px;padding:7px 22px;flex-wrap:wrap;text-align:center;font-weight:600;font-size:14px}
+  .countbar .cd-label b{font-weight:800}
+  .cd-timer{font-variant-numeric:tabular-nums;font-weight:800;letter-spacing:.02em;background:var(--ink);color:var(--accent);padding:5px 13px;border-radius:999px;white-space:nowrap}
+  .countbar.closed{background:#E5E9E8;color:var(--ink-soft)}
+  .countbar.closed .cd-timer{background:var(--ink-soft);color:#fff}
   .navbar{display:flex;align-items:center;justify-content:space-between;height:60px}
   .logo{display:flex;align-items:center;gap:12px}
   .logo .taco{height:30px;width:auto;display:block}
@@ -163,6 +169,12 @@
 <body>
 
 <header>
+  <div class="countbar" id="countbar">
+    <div class="wrap countbar-inner">
+      <span class="cd-label">⏳ Open enrollment closes <b>Friday, Aug 7</b> — enroll in Insperity by then</span>
+      <span class="cd-timer" id="cd">calculating…</span>
+    </div>
+  </div>
   <div class="wrap navbar">
     <div class="logo">
       <svg class="taco" viewBox="0 0 800 606" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M668.039 539.944L68.7085 605.832C59.4028 605.829 50.2959 603.139 42.4822 598.085C34.6686 593.031 28.4805 585.828 24.6616 577.342C20.8427 568.856 19.5555 559.447 20.9545 550.247C22.3536 541.047 26.3795 532.447 32.5484 525.48C142.565 400.135 372.358 127.75 585.286 127.75C629.391 127.743 672.588 140.284 709.831 163.911C841.607 246.663 800.615 395.303 762.855 478.056C754.557 496.309 741.233 511.822 724.443 522.782C707.652 533.741 688.088 539.694 668.039 539.944V539.944Z" fill="#FFBC00"/><path d="M584.51 63.4882C357.917 63.4882 133.756 311.745 7.61169 455.586C1.90938 446.764 -0.709322 436.302 0.16492 425.834C1.03916 415.366 5.35708 405.483 12.4437 397.729C122.492 272.385 352.285 0 565.214 0C609.319 -0.00794129 652.515 12.5337 689.758 36.1601C724.208 57.0339 751.195 88.2428 766.878 125.344C759.741 119.564 752.261 114.221 744.478 109.344C696.529 79.2997 641.062 63.425 584.478 63.5522" fill="#FFBC00"/></svg>
@@ -556,6 +568,29 @@ document.getElementById('scenario').addEventListener('keydown',e=>{
   if((e.metaKey||e.ctrlKey)&&e.key==='Enter') document.getElementById('findBtn').click();
 });
 buildScen();
+
+/* ---------------- Enrollment deadline countdown ---------------- */
+// Friday, Aug 7 2026, end of day Central (CDT = -05:00)
+const DEADLINE = new Date('2026-08-07T23:59:59-05:00').getTime();
+const cdEl = document.getElementById('cd');
+function tickCountdown(){
+  let diff = DEADLINE - Date.now();
+  if(diff <= 0){
+    cdEl.textContent = 'Enrollment has closed';
+    document.getElementById('countbar').classList.add('closed');
+    document.querySelector('.cd-label').innerHTML = 'Open enrollment for the 2026 plan year has closed — contact HR about qualifying life events';
+    clearInterval(cdTimer);
+    return;
+  }
+  const p = n => String(n).padStart(2,'0');
+  const d = Math.floor(diff/86400000); diff -= d*86400000;
+  const h = Math.floor(diff/3600000);  diff -= h*3600000;
+  const m = Math.floor(diff/60000);     diff -= m*60000;
+  const s = Math.floor(diff/1000);
+  cdEl.textContent = `${d}d ${p(h)}h ${p(m)}m ${p(s)}s left`;
+}
+tickCountdown();
+const cdTimer = setInterval(tickCountdown, 1000);
 </script>
 </body>
 </html>
