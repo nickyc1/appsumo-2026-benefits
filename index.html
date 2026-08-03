@@ -73,6 +73,13 @@
   .chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
   .chip{border:1px solid var(--line);background:#fff;border-radius:999px;padding:8px 14px;font-size:13px;font-weight:600;color:var(--ink-soft);cursor:pointer;transition:.15s}
   .chip:hover{border-color:var(--accent);background:#fffaf0;color:var(--ink)}
+  .coverage{margin-top:14px;display:flex;align-items:center;gap:9px 12px;flex-wrap:wrap}
+  .cov-label{font-size:13px;font-weight:700;color:var(--ink-soft)}
+  .cov-label em{font-style:normal;text-decoration:underline;text-decoration-color:var(--accent);text-decoration-thickness:2px;text-underline-offset:2px}
+  .cov-opts{display:inline-flex;flex-wrap:wrap;gap:6px}
+  .cov{border:1.5px solid var(--line);background:#fff;border-radius:999px;padding:7px 13px;font-size:13px;font-weight:600;color:var(--ink-soft);cursor:pointer;font-family:'Barlow';transition:.12s}
+  .cov:hover{border-color:var(--ink);color:var(--ink)}
+  .cov.active{background:var(--ink);color:#fff;border-color:var(--ink)}
   .go{margin-top:14px;display:flex;gap:10px;flex-wrap:wrap}
   .btn{border:none;cursor:pointer;font-family:'Barlow';font-weight:700;font-size:16px;border-radius:12px;padding:14px 26px;transition:.15s}
   .btn.primary{background:var(--accent);color:#000}
@@ -241,6 +248,16 @@
         <button class="chip" data-fill="I have a chronic condition, see a specialist regularly and take a few maintenance medications every month. I want predictable copays.">💊 Chronic condition</button>
         <button class="chip" data-fill="Married with four kids. Lots of doctor visits, ER trips, and several medications across the family every year.">🏥 Heavy medical use</button>
         <button class="chip" data-fill="Planning knee surgery this year. Single, want to keep my out-of-pocket predictable and I don't have much saved.">🩺 Planned surgery</button>
+      </div>
+      <div class="coverage">
+        <span class="cov-label">Who's on <em>your</em> plan?</span>
+        <div class="cov-opts" id="covOpts">
+          <button type="button" class="cov active" id="autoCov" data-tier="auto">Auto</button>
+          <button type="button" class="cov" data-tier="single">Just me</button>
+          <button type="button" class="cov" data-tier="couple">+ Spouse</button>
+          <button type="button" class="cov" data-tier="kids">+ Kids</button>
+          <button type="button" class="cov" data-tier="family">+ Family</button>
+        </div>
       </div>
       <div class="go">
         <button class="btn primary" id="findBtn">Build my plan →</button>
@@ -701,8 +718,28 @@ function buildScen(){
 }
 
 /* ---------------- Wire up ---------------- */
+let tierOverride='auto', lastText='', hasBuilt=false;
+const TIER_SHORT={single:'Just me', couple:'+ Spouse', kids:'+ Kids', family:'+ Family'};
+
+// Manual coverage pick wins over whatever the text-parser guessed
+function buildAnalysis(text){
+  const a=analyze(text);
+  if(tierOverride!=='auto'){
+    a.tier=tierOverride;
+    if(a.usage==='highFamily' && a.tier==='single') a.usage='highOne'; // one person caps at the individual max
+  }
+  return a;
+}
+function applyPlan(text){
+  const a=buildAnalysis(text);
+  renderPlan(a);
+  // On Auto, show what it detected so it's easy to spot & correct
+  document.getElementById('autoCov').textContent = (tierOverride==='auto') ? 'Auto: '+TIER_SHORT[a.tier] : 'Auto';
+  return a;
+}
 function runFinder(text){
-  renderPlan(analyze(text));
+  lastText=text; hasBuilt=true;
+  applyPlan(text);
   document.getElementById('plan').scrollIntoView({behavior:'smooth', block:'start'});
 }
 document.getElementById('findBtn').addEventListener('click',()=>{
@@ -712,6 +749,9 @@ document.getElementById('findBtn').addEventListener('click',()=>{
 });
 document.getElementById('resetBtn').addEventListener('click',()=>{
   document.getElementById('scenario').value='';
+  tierOverride='auto'; lastText=''; hasBuilt=false;
+  document.querySelectorAll('#covOpts .cov').forEach(b=>b.classList.toggle('active', b.dataset.tier==='auto'));
+  document.getElementById('autoCov').textContent='Auto';
   renderPlan(null);
   document.getElementById('scenario').focus();
 });
@@ -719,6 +759,13 @@ document.querySelectorAll('#chips .chip').forEach(ch=>{
   ch.addEventListener('click',()=>{
     document.getElementById('scenario').value=ch.dataset.fill;
     runFinder(ch.dataset.fill);
+  });
+});
+document.querySelectorAll('#covOpts .cov').forEach(btn=>{
+  btn.addEventListener('click',()=>{
+    tierOverride=btn.dataset.tier;
+    document.querySelectorAll('#covOpts .cov').forEach(b=>b.classList.toggle('active', b===btn));
+    if(hasBuilt) applyPlan(lastText);   // re-render in place, no scroll jump
   });
 });
 document.getElementById('scenario').addEventListener('keydown',e=>{
