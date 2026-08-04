@@ -50,6 +50,9 @@
   .logo .taco{height:30px;width:auto;display:block}
   .logo .wordmark{height:19px;width:auto;display:block}
   .badge{font-size:12px;font-weight:600;color:#d9d2c2;border:1px solid #39342b;padding:6px 12px;border-radius:999px}
+  .nav-right{display:flex;align-items:center;gap:11px}
+  .navlink{font-size:13px;font-weight:700;color:#fff;text-decoration:none;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.16);padding:7px 13px;border-radius:999px;white-space:nowrap;transition:.12s}
+  .navlink:hover{background:var(--accent);color:#000;border-color:var(--accent)}
   @media(max-width:560px){.badge{display:none}}
 
   /* ---------- Hero / finder ---------- */
@@ -58,6 +61,8 @@
       var(--ink);
     color:#fff;padding:52px 0 130px}
   .kicker{font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:.14em;font-size:12.5px;margin-bottom:14px}
+  .switch-note{font-size:18px;line-height:1.5;color:#f3eee1;max-width:62ch;margin-bottom:20px;padding:2px 0 2px 14px;border-left:3px solid var(--accent)}
+  .switch-note b{color:#fff;font-weight:700}
   .hero h1{font-size:clamp(30px,5vw,50px);font-weight:800;max-width:16ch}
   .hero h1 em{font-style:normal;color:var(--accent)}
   .hero p.sub{color:#cfc8b8;font-size:17px;margin-top:16px;max-width:56ch}
@@ -230,7 +235,10 @@
       <svg class="taco" viewBox="0 0 800 606" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M668.039 539.944L68.7085 605.832C59.4028 605.829 50.2959 603.139 42.4822 598.085C34.6686 593.031 28.4805 585.828 24.6616 577.342C20.8427 568.856 19.5555 559.447 20.9545 550.247C22.3536 541.047 26.3795 532.447 32.5484 525.48C142.565 400.135 372.358 127.75 585.286 127.75C629.391 127.743 672.588 140.284 709.831 163.911C841.607 246.663 800.615 395.303 762.855 478.056C754.557 496.309 741.233 511.822 724.443 522.782C707.652 533.741 688.088 539.694 668.039 539.944V539.944Z" fill="#FFBC00"/><path d="M584.51 63.4882C357.917 63.4882 133.756 311.745 7.61169 455.586C1.90938 446.764 -0.709322 436.302 0.16492 425.834C1.03916 415.366 5.35708 405.483 12.4437 397.729C122.492 272.385 352.285 0 565.214 0C609.319 -0.00794129 652.515 12.5337 689.758 36.1601C724.208 57.0339 751.195 88.2428 766.878 125.344C759.741 119.564 752.261 114.221 744.478 109.344C696.529 79.2997 641.062 63.425 584.478 63.5522" fill="#FFBC00"/></svg>
       <svg class="wordmark" viewBox="0 0 1180 183" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="AppSumo"><path d="M744.691 111.655C744.691 142.881 730.498 142.881 722.928 142.881C716.305 142.881 701.165 142.881 701.165 111.655V24.6006H665.207V117.332C665.207 153.29 688.863 177.891 722.928 177.891C756.993 177.891 780.649 153.281 780.649 117.332V24.6006H744.691V111.655Z" fill="white"/><path d="M1099.53 20.8174C1078.2 20.8174 1057.74 29.2913 1042.66 44.3749C1027.57 59.4586 1019.1 79.9164 1019.1 101.248C1019.1 122.579 1027.57 143.037 1042.66 158.121C1057.74 173.204 1078.2 181.678 1099.53 181.678C1144.95 181.678 1179.96 146.668 1179.96 101.249C1179.97 90.6839 1177.89 80.221 1173.86 70.4586C1169.82 60.6963 1163.89 51.826 1156.42 44.3555C1148.95 36.885 1140.08 30.9608 1130.32 26.9218C1120.56 22.8829 1110.09 20.8085 1099.53 20.8174V20.8174ZM1099.53 144.775C1088.03 144.645 1077.03 140.017 1068.9 131.883C1060.76 123.748 1056.13 112.752 1056 101.249C1056 89.7046 1060.59 78.6333 1068.75 70.4704C1076.92 62.3075 1087.99 57.7217 1099.53 57.7217C1111.07 57.7217 1122.15 62.3075 1130.31 70.4704C1138.47 78.6333 1143.06 89.7046 1143.06 101.249C1143.07 106.969 1141.96 112.636 1139.78 117.924C1137.59 123.212 1134.39 128.016 1130.34 132.061C1126.3 136.106 1121.49 139.311 1116.21 141.493C1110.92 143.675 1105.25 144.79 1099.53 144.775V144.775Z" fill="white"/><path d="M80.4296 0L0 176.947H40.6876L55.8279 142.882H105.033L120.173 176.947H160.861L80.4296 0ZM65.291 112.6L80.4313 75.6964L95.5749 112.6H65.291Z" fill="white"/><path d="M255.477 25.5498H196.817V174.109H233.721V131.528H253.591C290.494 131.528 313.205 110.711 313.205 78.5391C313.205 45.4216 291.442 25.5498 255.477 25.5498ZM275.349 79.4898C275.349 91.7949 266.833 99.3616 252.639 99.3616H233.721V58.669H252.645C267.786 58.669 275.356 66.2391 275.356 79.4864L275.349 79.4898Z" fill="white"/><path d="M408.77 25.5498H350.11V174.109H387.014V131.528H406.886C443.789 131.528 466.499 110.711 466.499 78.5391C465.552 45.4216 443.787 25.5498 408.77 25.5498ZM428.642 79.4898C428.642 91.7949 420.126 99.3616 405.932 99.3616H387.014V58.669H405.938C420.131 58.669 428.649 66.2391 428.649 79.4864L428.642 79.4898Z" fill="white"/><path d="M575.313 72.8595C545.984 65.2893 540.303 61.5051 540.303 52.042V51.0964C540.303 42.5806 547.873 37.849 561.12 37.849C574.368 37.849 588.561 43.5262 604.647 53.935L605.592 54.8806L626.41 24.6017L625.464 23.6561C607.427 9.39315 585.06 1.71589 562.066 1.89465C526.11 1.89465 501.507 23.6578 501.507 53.9383V54.884C501.507 90.8417 526.117 99.3575 558.282 107.873C586.669 115.443 591.399 120.178 591.399 127.745V128.691C591.399 138.154 582.884 142.884 568.689 142.884C551.664 142.884 535.57 136.259 519.484 123.012L518.538 122.066L494.884 150.454L495.829 151.399C515.825 169.345 541.825 179.137 568.691 178.84C607.487 178.84 632.089 158.022 632.089 124.9C630.196 93.6803 608.433 81.3786 575.313 72.8595Z" fill="white"/><path d="M903.659 182.624L859.186 106.926L845.938 176.947H813.767L846.886 20.8174L905.546 119.226L961.38 20.8174L994.498 176.947H960.435L947.187 107.871L903.659 182.624Z" fill="white"/></svg>
     </div>
-    <div class="badge">2026 Benefits · UnitedHealthcare</div>
+    <div class="nav-right">
+      <a class="navlink" href="meeting.html">📋 Meeting recap</a>
+      <span class="badge">2026 Benefits · UnitedHealthcare</span>
+    </div>
   </div>
 </header>
 
@@ -238,6 +246,7 @@
 <div class="hero">
   <div class="wrap">
     <div class="kicker">Open Enrollment · Sept 1 2026 – Aug 31 2027</div>
+    <p class="switch-note"><b>Big change for 2026:</b> after Blue Cross's renewal spiked, we're moving to <b>UnitedHealthcare</b> for medical (and Unum for dental, vision &amp; more). You have until <b>Friday, Aug 7</b> to make your elections in Insperity.</p>
     <h1>Which benefits are <em>right for you?</em></h1>
     <p class="sub">Tell us about your life — your family, your health, what you expect this year. We'll walk every 2026 election in order, starting with medical, and tell you exactly what we'd pick for your situation.</p>
     <p class="notice">ℹ️ This is just a tool — not medical advice. Use your own discretion and confirm details with HR.</p>
