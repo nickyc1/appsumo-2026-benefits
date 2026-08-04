@@ -61,6 +61,7 @@
   .hero h1{font-size:clamp(30px,5vw,50px);font-weight:800;max-width:16ch}
   .hero h1 em{font-style:normal;color:var(--accent)}
   .hero p.sub{color:#cfc8b8;font-size:17px;margin-top:16px;max-width:56ch}
+  .notice{margin-top:16px;display:inline-flex;align-items:center;gap:8px;font-size:13px;color:#cfc8b8;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);padding:8px 14px;border-radius:999px}
 
   .finder{margin-top:30px;background:var(--paper);border-radius:22px;box-shadow:var(--shadow);padding:20px;color:var(--ink)}
   .finder label{font-weight:700;font-size:14px;display:block;margin-bottom:8px}
@@ -239,6 +240,7 @@
     <div class="kicker">Open Enrollment · Sept 1 2026 – Aug 31 2027</div>
     <h1>Which benefits are <em>right for you?</em></h1>
     <p class="sub">Tell us about your life — your family, your health, what you expect this year. We'll walk every 2026 election in order, starting with medical, and tell you exactly what we'd pick for your situation.</p>
+    <p class="notice">ℹ️ This is just a tool — not medical advice. Use your own discretion and confirm details with HR.</p>
 
     <div class="finder">
       <label for="scenario">Describe your situation in a sentence or two</label>
@@ -300,7 +302,7 @@
   <div class="wrap">
     <div class="eyebrow">The three plans</div>
     <div class="h2">Your 2026 UnitedHealthcare options</div>
-    <p class="lead">All three cover 100% preventive care and use the same nationwide UHC Choice+ network. The difference is how you pay for everything else.</p>
+    <p class="lead">All three cover 100% preventive care. The HDHP uses the UHC <b>Choice</b> network and the two PPO plans use the UHC <b>Choice+</b> network — the main difference is how you pay for everything else.</p>
     <div class="plans">
       <div class="plan hdhp">
         <div class="cap">UHC Choice HDHP <small>HSA-eligible · high deductible</small></div>
@@ -527,7 +529,7 @@ function reasons(a, r){
     if(a.babyEvent) out.push('Even with a delivery, the HDHP\'s $10k family cap matches the Buy Up plan — but you pay far less in premium to get there.');
     if(a.heavyFam) out.push('Its out-of-pocket max is the same or lower than the other plans, so a heavy year still costs you the least overall.');
     if(a.lowUse) out.push('If you barely use care, most of that HSA money stays in your account as tax-free savings.');
-    out.push('Same nationwide UHC network and 100% preventive care as every other plan.');
+    out.push('Covers 100% preventive care, on UHC\'s nationwide Choice network.');
   } else if(p==='buyup'){
     out.push('Fixed copays from day one and <b>0% coinsurance</b> — no surprise percentage-of-the-bill charges.');
     out.push('Lowest deductible ($2,500 individual) and a $5k/$10k out-of-pocket cap, so your worst case is capped and predictable.');
